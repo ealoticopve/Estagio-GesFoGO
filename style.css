@@ -1,0 +1,215 @@
+#team {
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+path.leaflet-line {
+    stroke: #cf7d01;
+    stroke-width: 2;
+}
+
+div.imageVisor {
+    background-color: #f8f9fa;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    Height: 50%;
+    Width: 50%;
+    overflow: scroll;
+    padding: 10px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+p {
+    font-size: 20px;
+}
+
+div.nodeVisor {
+    background-color: #f8f9fa;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    Height: 50%;
+    Width: 50%;
+    overflow: auto;
+    padding: 10px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+div.mainVisor {
+    background-color: #f8f9fa;
+    border: 1px;
+    Height: 500px;
+    Width: 50%;
+    padding: 10px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    overflow: auto;
+}
+
+div.at {
+    Height: 100%;
+    Width: 100%;
+    position: relative;
+}
+
+a {
+    display: inline;
+}
+
+#option {
+    Height: 20px;
+    Width: 20px;
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    margin-left: 10px;
+    margin-top: 3px;
+}
+
+#map {
+    position: relative;
+    Height: 100%;
+    Width: 100%;
+    top: 40px;
+}
+
+#fullscream {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-top: 3px;
+    margin-right: 10px;
+}
+
+#mode {
+    padding: 4px;
+    border-radius: 4px;
+    left: 90px;
+    top: 30px;
+    z-index: 1;
+    position: absolute;
+    width: 30%;
+}
+
+h5 {
+    position: absolute;
+    left: 10px;
+    width: 20%;
+}
+
+#commands {
+    position: absolute;
+    height: 20px;
+    top: 25%;
+}
+
+#Box {
+    position: absolute;
+    top: 25%;
+    right: 0px;
+    margin-right: 5px;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    position: relative;
+    width: 30%;
+    height: 50%;
+    padding: 5px;
+}
+
+td,
+tr {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    text-align: left;
+}
+
+.range {
+    position: relative;
+    width: 50%;
+    height: 5px;
+}
+
+.range input {
+    width: 100%;
+    position: absolute;
+    top: 2px;
+    height: 0;
+    -webkit-appearance: none;
+}
+
+.range input::-webkit-slider-thumb {
+    -webkit-appearance: unset;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0;
+    border-radius: 50%;
+    background: #37adbf;
+    cursor: pointer;
+    border: 0 !important;
+}
+
+.range input::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: #b2b2b2;
+}
+
+.range input::-moz-range-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: #b2b2b2;
+}
+
+.range input::-ms-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: #b2b2b2;
+}
+
+.range-labels {
+    margin: 18px 0;
+    list-style: none;
+}
+
+.range-labels li {
+    position: relative;
+    float: left;
+    width: 90.25px;
+    text-align: center;
+    color: #b2b2b2;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.range-labels li::before {
+    position: absolute;
+    top: -25px;
+    right: 0;
+    left: 0;
+    content: "";
+    margin: 0 auto;
+    width: 9px;
+    height: 9px;
+    background: #b2b2b2;
+    border-radius: 50%;
+}

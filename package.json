@@ -1,0 +1,24 @@
+{
+    "name": "gesfogo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^8.2.0"
+    },
+    "dependencies": {
+        "@types/leaflet": "^1.5.12",
+        "bootstrap": "^4.4.1",
+        "jquery": "^3.5.1",
+        "leaflet": "^1.6.0",
+        "leaflet-draw": "^1.0.4",
+        "leaflet-freehandshapes": "^0.3.7",
+        "mysql": "^2.18.1",
+        "requirejs": "^2.3.6"
+    }
+}

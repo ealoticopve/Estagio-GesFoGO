@@ -1,0 +1,30 @@
+Full  Screen  - cada  visor********************************************************************************
+
+menu de opçoes - cada  visor
+    .MV - escolher linhas e cores ********************************************************************************
+    .NV - escolher ver estado, a configuração ou apontar especifico
+    .IV - escolher tipo de imagem e angulo de apontamento
+
+MV:
+    -desenhar perimetro livre no MV 
+    -mexer sensores
+
+NV:
+(estado)
+    -informação de longitude e latitude
+    -referecia temporal(time line)
+    -equipa responsavel
+    -especificacoes do sensor(bateria, comunicações disponiveis, alarmes)
+(configuração)
+    -versões de software
+    -versoes  de  hardware
+    -detalhe  dos  modelos de  sensores (camara, objetivo, sistema inercial, rotores)
+    -configurar tempo de apanhar dados
+    -forçar angulos (yaw_min, yaw_max y pitch_min y pitch_max)
+    -forçar direção fixa
+    
+IV:
+    -imagens que o sensor clicado está a ver
+    -escolher ver imagem visivel ou termica
+    -deve conter um triangulo desenhado com a zona de visão
+
