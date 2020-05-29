@@ -294,9 +294,21 @@
 
                                 //enable / disable drag&drop
                                 var count = 0;
+                                var openedSensor;
+                                var openedWindow;
+                                var openedSensorTargetLatLng;
+                                var openedSensorFieldOfView;
+                                var idOpenedSensor;
+
                                 cam.on('dblclick', function(event) {
                                     if (count == 0) {
                                         count++;
+                                        openedSensor = this;
+                                        idOpenedSensor = this.options.id;
+                                        openedSensorFieldOfView = openedSensor.getFieldOfView();
+                                        openedSensorTargetLatLng = openedSensor.getTargetLatLng();
+                                        console.log(openedSensorFieldOfView);
+                                        console.log(openedSensorTargetLatLng);
                                         this.setDraggable(true)
                                         this._cameraMarker.dragging.disable()
                                         this._targetMarker.dragging.enable()
@@ -307,10 +319,11 @@
                                             modal: false,
                                             closeButton: false
                                         });
+                                        openedWindow = win;
                                         win.prompt({
                                             callback: function() {
+                                                updateYaw(idOpenedSensor);
                                                 count = 0;
-                                                updateYaw();
                                             },
                                             buttonOK: "Confirm values"
                                         });
@@ -318,7 +331,13 @@
                                         win.showOn([0, 0]); //show window in top-left side
                                         console.log(win)
                                     } else {
-                                        //alert("Please, end the current configuration.")
+                                        if(confirm("If you click on another sensor the current sensor config will close. Are you sure you want to do that?")){
+                                            count = 0;
+                                            openedWindow.hide();
+                                            openedSensor.setDraggable(false);
+                                            openedSensor.setAngle(openedSensorFieldOfView.properties.angle);
+                                            openedSensor.setTargetLatLng(openedSensorTargetLatLng);
+                                        }
                                     }
                                 });
 
@@ -363,7 +382,8 @@
                     });
                 });
 
-                function updateYaw() {
+                function updateYaw(idSensor) {
+                    console.log('ola');
                     const mysql = require('mysql');
                     const connection = mysql.createConnection({
                         host: '127.0.0.1',
@@ -379,7 +399,7 @@
                         console.log("successful connection");
                     });
 
-                    var id = document.getElementById("SI").value;
+                    var id = idSensor;
                     var btn_hidden_angle = document.getElementById("btn_hidden_angle").value;
                     var btn_hidden_yaw_long = document.getElementById("btn_hidden_yaw_long").value
                     var btn_hidden_yaw_lat = document.getElementById("btn_hidden_yaw_lat").value
