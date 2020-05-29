@@ -1,6 +1,9 @@
 var marker1 = L.marker([51.5, -0.09], { time: "2013-01-22 08:42:26+01" });
 var marker2 = L.marker([51.6, -0.09], { time: "2013-01-22 10:00:26+01" });
 var marker3 = L.marker([51.7, -0.09], { time: "2013-01-22 10:03:29+01" });
+var marker4 = L.marker([51.7, -0.09], { time: "2013-01-22 10:03:29+01" });
+var marker5 = L.marker([51.7, -0.09], { time: "2013-01-22 10:03:29+01" });
+var marker6 = L.marker([51.7, -0.09], { time: "2013-01-22 10:03:29+01" });
 
 var pointA = new L.LatLng(51.8, -0.09);
 var pointB = new L.LatLng(51.9, -0.2);
@@ -15,7 +18,7 @@ var polyline = new L.Polyline(pointList, {
 });
 
 
-layerGroup = L.layerGroup([marker1, marker2, marker3, polyline]);
-var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layerGroup, range: true }, {orientation: 'vertical'});
+layerGroup = L.layerGroup([marker1, marker2, marker3, marker4, marker5, marker6, polyline]);
+var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layerGroup, range: true });
 mymap.addControl(sliderControl);
 sliderControl.startSlider();
