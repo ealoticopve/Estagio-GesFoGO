@@ -110,7 +110,10 @@
                     fillOpacity: 0.5,
                 }).addTo(mymap);*/
 
-                //console.log(polygon)
+                mymap.on('click', function(e) {
+                    console.log("[" + e.latlng.lat + ", " + e.latlng.lng + "]")
+                });
+
                 //Tiles 
                 var mapTiles = {
                     "satelite": L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=HsE7HIt6q0MJ6monGnhT', {
