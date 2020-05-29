@@ -1,56 +1,67 @@
-//var layersGeoJSON = L.layerGroup(); //timeline polygons
-const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'nodevisor'
-});
-//start connection
-connection.connect((err) => {
-    if (err) {
-        return console.log(err.stack);
-    }
-    console.log("Sucessfuly connection");
-});
+function aa() {
 
-//query for capture all properties values of instanced sensors
-query = "SELECT date, AsText(`firelines_coords`) as coords FROM timeline_info"
-connection.query(query, function(err, result, fields) {
-    if (err) {
-        console.log(err);
-    }
-
-    for (i in result) {
-        //console.log(result[i].coords);
-        var res = result[i].coords.split("POLYGON((");
-        //console.log("1º Split: " + res[1])
-        var res = res[1].split("))");
-        //console.log("2º Split: " + res[0])
-        var res = res[0].split(",");
-        console.log(res)
-        for (i in res) {
-            console.log(i + " polygon: " + res[i])
-                //console.log(res[i])
-                //var res = res[i].split(" ");
-                //console.log("lng: " + res[0])
-                //console.log("lat: " + res)
+    var LatLng = [];
+    var Coordenadas = [];
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'nodevisor'
+    });
+    //start connection
+    connection.connect((err) => {
+        if (err) {
+            return console.log(err.stack);
         }
-    }
-});
+        console.log("Sucessfuly connection");
+    });
 
-/*
-var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, range: true });
-mymap.addControl(sliderControl);
-sliderControl.startSlider();
-*/
+    //query for capture all properties values of instanced sensors
+    query = "SELECT date, AsText(`firelines_coords`) as coords FROM timeline_info"
+    connection.query(query, function(err, result, fields) {
+        if (err) {
+            console.log(err);
+        } else {
+            for (i in result) {
+                console.log(result[i].date);
+                var resWithoutPolygon = result[i].coords.split("POLYGON((");
+                //console.log("1º Split: " + resWithoutPolygon[1])
+                var resWithoutPolygon2 = resWithoutPolygon[1].split("))");
+                //console.log("2º Split: " + res[0])
+                var res = resWithoutPolygon2[0].split(",");
+                console.log("--------------------------------------");
+                console.log("Poligono: " + i);
+                console.log("--------------------------------------");
+                //console.log(res)
+                for (j in res) {
+                    var coordenadas = res[j].split(" ");
+                    //console.log("Longitude: " + coordenadas[0]);
+                    //console.log("Latitude: " + coordenadas[1]);
+                    Coordenadas = [coordenadas[1], coordenadas[0]]
+                    LatLng.push(Coordenadas);
+                }
+                var polygon = L.polygon(LatLng, { color: 'red' }, { time: result[i].date })
+                layersGeoJSON.addLayer(polygon);
+            }
+        }
+    });
 
-//close connection
-connection.end(() => {
-    console.log("Connection closed with sucess.");
-});
+    setTimeout(function() {
+        var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 1, rezoom: 20 });
+        mymap.addControl(sliderControl);
+        sliderControl.startSlider();
+    }, 1000)
 
 
+    //close connection
+    connection.end(() => {
+        console.log("Connection closed with sucess.");
+    });
+
+}
+
+aa();
 /*insert
 
 INSERT INTO timeline_info (`firelines_coords`,`date`)

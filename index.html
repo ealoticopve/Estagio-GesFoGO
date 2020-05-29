@@ -90,6 +90,7 @@
                 var sensor; //variable that represent a sensor
                 var sensorGroup = L.layerGroup(); //sensors layers
                 var fireLinesGroup = L.layerGroup(); //fire lines layers
+                var layersGeoJSON = L.layerGroup(); //timeline polygons
                 //my leaflet map
                 var mymap = L.map('map', {
                     center: [32.751589401074156, -16.893112091737557], //centered in Madeira Island
@@ -334,7 +335,7 @@
                                         win.showOn([0, 0]); //show window in top-left side
                                         console.log(win)
                                     } else {
-                                        if(confirm("If you click on another sensor the current sensor config will close. Are you sure you want to do that?")){
+                                        if (confirm("If you click on another sensor the current sensor config will close. Are you sure you want to do that?")) {
                                             count = 0;
                                             openedWindow.hide();
                                             openedSensor.setDraggable(false);
@@ -372,7 +373,7 @@
                 //sensorGroup = L.layerGroup(sensores).addTo(mymap);
                 var layerGroups = {
                     "Sensors": sensorGroup,
-                    "Fire lines": fireLinesGroup
+                    "Fire lines": layersGeoJSON
                 }
                 var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
 
