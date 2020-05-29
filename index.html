@@ -167,10 +167,10 @@
                             shadowLines.setMode('view');
                             break;
                         case 'draw-fl':
-                            fireLinesGroup.addLayer(fireLines).addTo(mymap);
-                            console.log(fireLinesGroup)
                             shadowLines.setMode('view');
                             fireLines.setMode('add');
+                            fireLinesGroup.addLayer(fireLines).addTo(mymap);
+                            console.log(fireLinesGroup);
                             break;
                         case 'draw-sl':
                             shadowLines.addTo(mymap);
@@ -365,16 +365,13 @@
                 }
 
                 //save sensors in layer group
-                setTimeout(function() {
-                    //sensorGroup = L.layerGroup(sensores).addTo(mymap);
-                    var layerGroups = {
-                        "Sensors": sensorGroup,
-                        "Fire lines": fireLinesGroup
-                    }
-                    var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
 
-
-                }, 1000);
+                //sensorGroup = L.layerGroup(sensores).addTo(mymap);
+                var layerGroups = {
+                    "Sensors": sensorGroup,
+                    "Fire lines": fireLinesGroup
+                }
+                var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
 
                 mymap.on('overlayadd', function() {
                     sensorGroup.eachLayer(function(layer) {
