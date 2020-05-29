@@ -16,6 +16,6 @@ var polyline = new L.Polyline(pointList, {
 
 
 layerGroup = L.layerGroup([marker1, marker2, marker3, polyline ]);
-var sliderControl = L.control.sliderControl({position: "bottomleft", layer:layerGroup});
+var sliderControl = L.control.sliderControl({position: "bottomleft", layer:layerGroup, range: true});
 mymap.addControl(sliderControl);
 sliderControl.startSlider();
