@@ -12,14 +12,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.freedraw/2.0.1/leaflet-freedraw.web.js"></script>
-    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="jquery-1.9.1.min.js"></script>
     <script src="./jquery-ui.js"></script>
     <script src="bower_components/leaflet-slider/SliderControl.js"></script>
     <script src="https://unpkg.com/leaflet-geotag-photo/dist/Leaflet.GeotagPhoto.min.js"></script>
     <script src="https://unpkg.com/leaflet-geotag-photo@0.5.1/dist/Leaflet.GeotagPhoto.min.js"></script>
-
+    <script src="leaflet-control-window/L.Control.Window.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -30,970 +32,971 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geotag-photo/dist/Leaflet.GeotagPhoto.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geotag-photo@0.5.1/dist/Leaflet.GeotagPhoto.css" />
     <link rel="stylesheet" href="./jquery-ui.css" />
+    <link rel="stylesheet" href="./leaflet-control-window/L.Control.Window.css" />
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">GesFoGO</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="incendios.html"><span
+                                class="glyphicon glyphicon-fire"></span>
+                            Incendios
+                            <span
+                                class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="madeira.html"><span
+                                class="glyphicon glyphicon-tree-conifer"></span>Madeira
+                            <span
+                                class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="canarias.html"><span
+                                class="glyphicon glyphicon-tree-conifer"></span>Canarias
+                            <span
+                                class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-</head>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="index.html">GesFoGO</a>
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="incendios.html"><span
-                            class="glyphicon glyphicon-fire"></span> Incendios
-                        <span
-                            class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="madeira.html"><span
-                            class="glyphicon glyphicon-tree-conifer"></span>Madeira
-                        <span
-                            class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="canarias.html"><span
-                            class="glyphicon glyphicon-tree-conifer"></span>Canarias
-                        <span
-                            class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-    </nav>
-</header>
+    <body>
+        <div class="at">
+            <!-- MainVisor -->
+            <div id="MV" class="mainVisor">
+                <h4 id="mainvisortitle" class="text-center">MainVisor</h4>
+                <button id="fullscream" class="btn
+                        btn-outline-danger" onclick="FullscreenMV();">
+                        Fullscreen
+                        Mode </button>
+                <h5> Draw Tools</h5>
+                <select id='mode' class="btn-danger custom-select">
+                        <option value="nothing"></option>
+                        <option value="draw-fl">Draw Fire lines</option>
+                        <option value="draw-sl">Draw Shadow lines</option>
+                        <option value="delete">Delete lines</option>
+                    </select>
 
-<body>
-    <div class="at">
-        <!-- MainVisor -->
-        <div id="MV" class="mainVisor">
-            <h4 id="mainvisortitle" class="text-center">MainVisor</h4>
-            <button id="fullscream" class="btn
-                    btn-outline-danger" onclick="FullscreenMV();"> Fullscreen
-                    Mode </button>
-            <h5> Draw Tools</h5>
-            <select id='mode' class="btn-danger custom-select">
-                    <option value="nothing"></option>
-                    <option value="draw-fl">Draw Fire lines</option>
-                    <option value="draw-sl">Draw Shadow lines</option>
-                    <option value="delete">Delete lines</option>
-                </select>
-
-            <div id="map">
+                <div id="map">
+                </div>
+                <input type="hidden" id="btn_hidden_angle" value="">';
+                <input type="hidden" id="btn_hidden_yaw_lat" value="">';
+                <input type="hidden" id="btn_hidden_yaw_long" value="">';
             </div>
-            <input type="hidden" id="btn_hidden_angle" value="">';
-            <input type="hidden" id="btn_hidden_yaw_lat" value="">';
-            <input type="hidden" id="btn_hidden_yaw_long" value="">';
-        </div>
-        <!--*********************
+            <!--*********************
             **mapas e pointers**
             **********************-->
-        <script>
-            var sensor; //variable that represent a sensor
-            var sensorGroup = L.layerGroup(); //sensors layers
-            var fireLinesGroup = L.layerGroup(); //fire lines layers
-            //my leaflet map
-            var mymap = L.map('map', {
-                center: [32.751589401074156, -16.893112091737557], //centered in Madeira Island
-                zoom: 13,
-                zoomControl: false,
-                fullscreenControl: true,
-            });
+            <script>
+                var sensor; //variable that represent a sensor
+                var sensorGroup = L.layerGroup(); //sensors layers
+                var fireLinesGroup = L.layerGroup(); //fire lines layers
+                //my leaflet map
+                var mymap = L.map('map', {
+                    center: [32.751589401074156, -16.893112091737557], //centered in Madeira Island
+                    zoom: 13,
+                    zoomControl: false,
+                    fullscreenControl: true,
+                });
 
-            //Polygon - Fire zone
-            var polygon = L.polygon([
-                [32.751589401074156, -16.893112091737557], // start point
-                [32.751819589648335, -16.920664420821403],
-                [32.76159954908414, -16.94118391324711, ],
-                [32.73215569845409, -16.926709719676907],
-                [32.751589401074156, -16.893112091737557] // end point = start point
-            ], {
-                fillColor: 'yellow',
-                fillOpacity: 0.5,
-            }).addTo(mymap);
+                //Polygon - Fire zone
+                /*var polygon = L.polygon([
+                    [32.751589401074156, -16.893112091737557], // start point
+                    [32.751819589648335, -16.920664420821403],
+                    [32.76159954908414, -16.94118391324711, ],
+                    [32.73215569845409, -16.926709719676907],
+                    [32.751589401074156, -16.893112091737557] // end point = start point
+                ], {
+                    fillColor: 'yellow',
+                    fillOpacity: 0.5,
+                }).addTo(mymap);*/
 
-            console.log(polygon)
+                //console.log(polygon)
                 //Tiles 
-            var mapTiles = {
-                "satelite": L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=HsE7HIt6q0MJ6monGnhT', {
-                    attribution: '<a href="http://www.gesfogo.ulpgc.es/index.php/es/">GesFoGO M-ITI</a>'
-                }).addTo(mymap),
-                "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-                    attribution: 'google'
-                }),
-                "cartiqo": L.tileLayer('https://api.maptiler.com/maps/topographique/{z}/{x}/{y}.png?key=HsE7HIt6q0MJ6monGnhT', {
-                    attribution: '<a href="http://www.gesfogo.ulpgc.es/index.php/es/">GesFoGO M-ITI</a>'
-                })
-            }
-
-            //Free Hand Draws/Shapes
-            require('leaflet-freehandshapes');
-            var fireLines = new L.FreeHandShapes({
-                polygon: {
-                    color: 'red',
-                    fillColor: 'red',
-                    weight: 3,
-                    smoothFactor: 0
-                },
-                polyline: {
-                    color: '#D55F04',
-                    smoothFactor: 0
-                },
-                simplify_tolerance: 0.001,
-                merge_polygons: true,
-                concave_polygons: false
-            });
-            var shadowLines = new L.FreeHandShapes({
-                polygon: {
-                    color: '#8F6F56',
-                    fillColor: '#8F6F56',
-                    weight: 3,
-                    smoothFactor: 0
-                },
-                polyline: {
-                    color: '#8F6F56',
-                    smoothFactor: 0
-                },
-                simplify_tolerance: 0.001,
-                merge_polygons: true,
-                concave_polygons: false
-            });
-
-
-            //change draw mode
-            document.getElementById('mode').onchange = function() {
-                //freeDraw allows us to create and edit
-                switch (this.value) {
-                    case 'nothing':
-                        fireLines.setMode('view');
-                        shadowLines.setMode('view');
-                        break;
-                    case 'draw-fl':
-                        fireLinesGroup.addLayer(fireLines).addTo(mymap);
-                        console.log(fireLinesGroup)
-                        shadowLines.setMode('view');
-                        fireLines.setMode('add');
-                        break;
-                    case 'draw-sl':
-                        shadowLines.addTo(mymap);
-                        fireLines.setMode('view');
-                        shadowLines.setMode('add');
-                        break;
-                    case 'delete':
-                        fireLines.setMode('delete');
-                        shadowLines.setMode('delete');
-                        break;
-                    default:
-                        break;
+                var mapTiles = {
+                    "satelite": L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=HsE7HIt6q0MJ6monGnhT', {
+                        attribution: '<a href="http://www.gesfogo.ulpgc.es/index.php/es/">GesFoGO M-ITI</a>'
+                    }).addTo(mymap),
+                    "google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+                        attribution: 'google'
+                    }),
+                    "cartiqo": L.tileLayer('https://api.maptiler.com/maps/topographique/{z}/{x}/{y}.png?key=HsE7HIt6q0MJ6monGnhT', {
+                        attribution: '<a href="http://www.gesfogo.ulpgc.es/index.php/es/">GesFoGO M-ITI</a>'
+                    })
                 }
-            };
 
-            //get all sensors from DB and visualize them in mymap
-            getInstances();
-
-            function getInstances() {
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
+                //Free Hand Draws/Shapes
+                require('leaflet-freehandshapes');
+                var fireLines = new L.FreeHandShapes({
+                    polygon: {
+                        color: 'red',
+                        fillColor: 'red',
+                        weight: 3,
+                        smoothFactor: 0
+                    },
+                    polyline: {
+                        color: '#D55F04',
+                        smoothFactor: 0
+                    },
+                    simplify_tolerance: 0.001,
+                    merge_polygons: true,
+                    concave_polygons: false
                 });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
+                var shadowLines = new L.FreeHandShapes({
+                    polygon: {
+                        color: '#8F6F56',
+                        fillColor: '#8F6F56',
+                        weight: 3,
+                        smoothFactor: 0
+                    },
+                    polyline: {
+                        color: '#8F6F56',
+                        smoothFactor: 0
+                    },
+                    simplify_tolerance: 0.001,
+                    merge_polygons: true,
+                    concave_polygons: false
                 });
 
-                //query for capture all properties values of instanced sensors
-                query = "SELECT sensor.id, sensor.longitude, sensor.latitude, commands.yaw_lat, commands.yaw_long, commands.angle FROM sensor,commands WHERE commands.sensor_id = sensor.id"
-                connection.query(query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
+
+                //change draw mode
+                document.getElementById('mode').onchange = function() {
+                    //freeDraw allows us to create and edit
+                    switch (this.value) {
+                        case 'nothing':
+                            fireLines.setMode('view');
+                            shadowLines.setMode('view');
+                            break;
+                        case 'draw-fl':
+                            fireLinesGroup.addLayer(fireLines).addTo(mymap);
+                            console.log(fireLinesGroup)
+                            shadowLines.setMode('view');
+                            fireLines.setMode('add');
+                            break;
+                        case 'draw-sl':
+                            shadowLines.addTo(mymap);
+                            fireLines.setMode('view');
+                            shadowLines.setMode('add');
+                            break;
+                        case 'delete':
+                            fireLines.setMode('delete');
+                            shadowLines.setMode('delete');
+                            break;
+                        default:
+                            break;
                     }
-                    var lat; //latitude
-                    var long; //longitude
-                    var yaw_long; //yaw
-                    var yaw_lat; //yaw
-                    var angles; //angle
-                    for (i in result) {
-                        lat = result[i].latitude; //saving latitude from db
-                        long = result[i].longitude; //saving longitude from db
-                        yaw_lat = result[i].yaw_lat;
-                        yaw_long = result[i].yaw_long;
-                        angles = result[i].angle;
+                };
 
-                        if (angles <= 0) {
-                            angles = 1;
+                //get all sensors from DB and visualize them in mymap
+                getInstances();
+
+                function getInstances() {
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
                         }
-                        if (yaw_lat == 0) {
-                            yaw_lat = lat;
+                        console.log("Sucessfuly connection");
+                    });
+
+                    //query for capture all properties values of instanced sensors
+                    query = "SELECT sensor.id, sensor.longitude, sensor.latitude, commands.yaw_lat, commands.yaw_long, commands.angle FROM sensor,commands WHERE commands.sensor_id = sensor.id"
+                    connection.query(query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
                         }
-                        if (yaw_long == 0) {
-                            yaw_long = long;
-                        }
+                        var lat; //latitude
+                        var long; //longitude
+                        var yaw_long; //yaw
+                        var yaw_lat; //yaw
+                        var angles; //angle
+                        for (i in result) {
+                            lat = result[i].latitude; //saving latitude from db
+                            long = result[i].longitude; //saving longitude from db
+                            yaw_lat = result[i].yaw_lat;
+                            yaw_long = result[i].yaw_long;
+                            angles = result[i].angle;
 
-                        //when we got lat and long we instance the sensors in map
-                        if (lat != undefined && long != undefined) {
-                            //creationg of sensor in map 
-
-                            var cameraPoint = [long, lat]
-                            var targetPoint = [yaw_long, yaw_lat]
-
-                            var type = 'Feature';
-                            var properties = {
-                                angle: angles
-                            };
-
-                            var geometries = {
-                                type: 'GeometryCollection',
-                                geometries: [{
-                                    type: 'Point',
-                                    coordinates: cameraPoint
-                                }, {
-                                    type: 'Point',
-                                    coordinates: targetPoint
-                                }]
-                            };
-
-                            var points = {
-                                type: type,
-                                properties: properties,
-                                geometry: geometries
+                            if (angles <= 0) {
+                                angles = 1;
                             }
-                            var options = {
-                                draggable: false,
-                                control: false,
-                                angleMarker: true
+                            if (yaw_lat == 0) {
+                                yaw_lat = lat;
+                            }
+                            if (yaw_long == 0) {
+                                yaw_long = long;
                             }
 
-                            //camera instance 
+                            //when we got lat and long we instance the sensors in map
+                            if (lat != undefined && long != undefined) {
+                                //creationg of sensor in map 
 
-                            var cam = L.geotagPhoto.camera(points, options)
+                                var cameraPoint = [long, lat]
+                                var targetPoint = [yaw_long, yaw_lat]
 
-                            //camera
-                            cam._cameraIcon.options.iconUrl = './images/camera.png';
+                                var type = 'Feature';
+                                var properties = {
+                                    angle: angles
+                                };
 
-                            //target
-                            cam._targetIcon.options.iconUrl = './images/down-arrow.png';
-                            cam._targetIcon.options.iconSize = [25, 40]
+                                var geometries = {
+                                    type: 'GeometryCollection',
+                                    geometries: [{
+                                        type: 'Point',
+                                        coordinates: cameraPoint
+                                    }, {
+                                        type: 'Point',
+                                        coordinates: targetPoint
+                                    }]
+                                };
 
-                            //angle
-                            cam._angleIcon.options.iconUrl = './images/marker.svg';
-                            cam._angleIcon.options.iconSize = [25, 20]
-
-                            cam.options.id = result[i].id;
-
-                            cam.addTo(mymap);
-
-                            cam.on('change', function(event) {
-                                document.getElementById("btn_hidden_angle").value = this.getFieldOfView().properties.angle;
-                                document.getElementById("btn_hidden_yaw_lat").value = this.getTargetLatLng().lat;
-                                document.getElementById("btn_hidden_yaw_long").value = this.getTargetLatLng().lng;
-                            })
-
-                            //enable / disable drag&drop
-                            var count = 0;
-                            cam.on('dblclick', function(event) {
-                                if (count == 0) {
-                                    count++;
-                                    this.setDraggable(true)
-                                    this._cameraMarker.dragging.disable()
-                                    this._targetMarker.dragging.enable()
-                                    this._angleMarker.dragging.enable()
-                                    var win = L.control.window(map, {
-                                        title: 'Yaw Configuration!',
-                                        maxWidth: 350,
-                                        modal: false,
-                                        closeButton: false
-                                    });
-                                    win.prompt({
-                                        callback: function() {
-                                            count = 0;
-                                            updateYaw();
-                                        },
-                                        buttonOK: "Confirm values"
-                                    });
-                                    win.show();
-                                    win.showOn([0, 0]); //show window in top-left side
-                                    console.log(win)
-                                } else {
-                                    alert("Please, end the current configuration.")
+                                var points = {
+                                    type: type,
+                                    properties: properties,
+                                    geometry: geometries
                                 }
-                            });
+                                var options = {
+                                    draggable: false,
+                                    control: false,
+                                    angleMarker: true
+                                }
 
-                            //show information in nodeVisor when we click the sensor
-                            cam.on('click', function(id) {
-                                id = this.options.id; // sensor id clicked
-                                var idS = document.getElementById("SI").value = id; //send a hidden value with the id : SI-> Sensor ID
-                                showInfoNV(idS); //call function to show info in NV
-                            })
+                                //camera instance 
 
-                            sensorGroup.addLayer(cam).addTo(mymap);
+                                var cam = L.geotagPhoto.camera(points, options)
 
-                            lat = undefined; //reseting lat from new call to db 
-                            long = undefined; //reseting long from new call to db  
+                                //camera
+                                cam._cameraIcon.options.iconUrl = './images/camera.png';
+
+                                //target
+                                cam._targetIcon.options.iconUrl = './images/down-arrow.png';
+                                cam._targetIcon.options.iconSize = [25, 40]
+
+                                //angle
+                                cam._angleIcon.options.iconUrl = './images/marker.svg';
+                                cam._angleIcon.options.iconSize = [25, 20]
+
+                                cam.options.id = result[i].id;
+
+                                cam.addTo(mymap);
+
+                                cam.on('change', function(event) {
+                                    document.getElementById("btn_hidden_angle").value = this.getFieldOfView().properties.angle;
+                                    document.getElementById("btn_hidden_yaw_lat").value = this.getTargetLatLng().lat;
+                                    document.getElementById("btn_hidden_yaw_long").value = this.getTargetLatLng().lng;
+                                })
+
+                                //enable / disable drag&drop
+                                var count = 0;
+                                cam.on('dblclick', function(event) {
+                                    if (count == 0) {
+                                        count++;
+                                        this.setDraggable(true)
+                                        this._cameraMarker.dragging.disable()
+                                        this._targetMarker.dragging.enable()
+                                        this._angleMarker.dragging.enable()
+                                        var win = L.control.window(map, {
+                                            title: 'Yaw Configuration!',
+                                            maxWidth: 350,
+                                            modal: false,
+                                            closeButton: false
+                                        });
+                                        win.prompt({
+                                            callback: function() {
+                                                count = 0;
+                                                updateYaw();
+                                            },
+                                            buttonOK: "Confirm values"
+                                        });
+                                        win.show();
+                                        win.showOn([0, 0]); //show window in top-left side
+                                        console.log(win)
+                                    } else {
+                                        //alert("Please, end the current configuration.")
+                                    }
+                                });
+
+                                //show information in nodeVisor when we click the sensor
+                                cam.on('click', function(id) {
+                                    id = this.options.id; // sensor id clicked
+                                    var idS = document.getElementById("SI").value = id; //send a hidden value with the id : SI-> Sensor ID
+                                    showInfoNV(idS); //call function to show info in NV
+                                })
+
+                                sensorGroup.addLayer(cam).addTo(mymap);
+
+                                lat = undefined; //reseting lat from new call to db 
+                                long = undefined; //reseting long from new call to db  
+                            }
                         }
+                        sensorGroup.eachLayer(function(layer) {
+                            layer.setDraggable(false)
+                        });
+                    });
+                    //close connection
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+                }
+
+                //save sensors in layer group
+                setTimeout(function() {
+                    //sensorGroup = L.layerGroup(sensores).addTo(mymap);
+                    var layerGroups = {
+                        "Sensors": sensorGroup,
+                        "Fire lines": fireLinesGroup
                     }
+                    var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
+
+
+                }, 1000);
+
+                mymap.on('overlayadd', function() {
                     sensorGroup.eachLayer(function(layer) {
                         layer.setDraggable(false)
                     });
                 });
-                //close connection
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            }
 
-            //save sensors in layer group
-            setTimeout(function() {
-                //sensorGroup = L.layerGroup(sensores).addTo(mymap);
-                var layerGroups = {
-                    "Sensors": sensorGroup,
-                    "Fire lines": fireLinesGroup
-                }
-                var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
+                function updateYaw() {
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("successful connection");
+                    });
 
+                    var id = document.getElementById("SI").value;
+                    var btn_hidden_angle = document.getElementById("btn_hidden_angle").value;
+                    var btn_hidden_yaw_long = document.getElementById("btn_hidden_yaw_long").value
+                    var btn_hidden_yaw_lat = document.getElementById("btn_hidden_yaw_lat").value
 
-            }, 1000);
+                    //query for capture all specifc tech info from sensor
+                    $query = "UPDATE commands SET yaw_lat='" + btn_hidden_yaw_lat + "', yaw_long ='" + btn_hidden_yaw_long + "', angle ='" + btn_hidden_angle + "' WHERE sensor_id=" + id;
+                    //$query = "select * from sensor"
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
+                        }
+                    })
 
-            mymap.on('overlayadd', function() {
-                sensorGroup.eachLayer(function(layer) {
-                    layer.setDraggable(false)
-                });
-            });
-
-            function updateYaw() {
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("successful connection");
-                });
-
-                var id = document.getElementById("SI").value;
-                var btn_hidden_angle = document.getElementById("btn_hidden_angle").value;
-                var btn_hidden_yaw_long = document.getElementById("btn_hidden_yaw_long").value
-                var btn_hidden_yaw_lat = document.getElementById("btn_hidden_yaw_lat").value
-
-                //query for capture all specifc tech info from sensor
-                $query = "UPDATE commands SET yaw_lat='" + btn_hidden_yaw_lat + "', yaw_long ='" + btn_hidden_yaw_long + "', angle ='" + btn_hidden_angle + "' WHERE sensor_id=" + id;
-                //$query = "select * from sensor"
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
-                    }
-                })
-
-                //close button
-                sensorGroup.eachLayer(function(layer) {
-                    if (layer.options.id == id) {
-                        layer.setDraggable(false)
-                    } else {
-                        //pass
-                    }
-                });
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            }
-
-
-
-            function showSpecifSensorNV() {
-                //show sensor static info from DB in NV
-                if (document.getElementById("SI").value === "") { //cheking if we clicked a sensor 
-                    alert("Please, click on the sensor to show its configurations.")
-                    return;
+                    //close button
+                    sensorGroup.eachLayer(function(layer) {
+                        if (layer.options.id == id) {
+                            layer.setDraggable(false)
+                        } else {
+                            //pass
+                        }
+                    });
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
                 }
 
-                var idSensor = document.getElementById("SI").value;
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("successful connection");
-                });
 
-                //query for capture all specifc tech info from sensor
-                $query = "SELECT * FROM techspecifications WHERE sensor_id ='" + idSensor + "'";
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
-                    }
-                    var table = document.getElementById("nv_table");
 
-                    //time out to get the doc ready
-                    //displaying sensor technical info 
-                    setTimeout(function() {
-                        for (var i = 0, row; row = table.rows[i]; i++) {
-                            for (var j = 0, col; col = row.cells[j]; j++) {
-                                table.innerHTML =
-                                    '<tr><th> Sensor: </th><td>' + result[0].sensor_id + '</td></tr>' +
-                                    '<tr><th> Serial number: </th><td>' + result[0].serial_number + '</td></tr>' +
-                                    '<tr><th> Actual Communication Service: </th><td>' + result[0].communication + '</td></tr>' +
-                                    '<tr><th> Alarm type: </th><td>' + result[0].alarm_id + '</td></tr>' +
-                                    '<tr><th> Maximun len lenght: </th><td>' + result[0].camera_len_lenght + '</td></tr>' +
-                                    '<tr><th> Battery Capacity: </th><td>' + result[0].battery_capacity + '</td></tr>' +
-                                    '<th><button id="config" class="btn-danger" onclick="configMenu();"> Configurate Sensor </button></th>' +
-                                    '<input type="hidden" id="SI" value="' + result[0].sensor_id + '">';
-                            }
+                function showSpecifSensorNV() {
+                    //show sensor static info from DB in NV
+                    if (document.getElementById("SI").value === "") { //cheking if we clicked a sensor 
+                        alert("Please, click on the sensor to show its configurations.")
+                        return;
+                    }
+
+                    var idSensor = document.getElementById("SI").value;
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
                         }
-                    }, 200);
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
+                        console.log("successful connection");
+                    });
 
-            }
-
-            function configMenu() {
-                //show info from DB in NV
-                var idSensor = document.getElementById("SI").value;
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
-
-                //query for capture all posible commands/commands
-                $query = "SELECT * FROM commands,sensor WHERE sensor_id ='" + idSensor + "'";
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
-                    }
-
-                    var table = document.getElementById("nv_table");
-                    var idSensor = result[0].sensor_id;
-                    //time out to get the doc ready
-                    setTimeout(function() {
-                        for (var i = 0, row; row = table.rows[i]; i++) {
-                            for (var j = 0, col; col = row.cells[j]; j++) {
-                                table.innerHTML =
-                                    '<tr><th> Comandos: </th><td id ="aham"> ' +
-                                    '<select class="btn-danger" id="commands">' +
-                                    '<option name="option" value="nada"></option>' +
-                                    '<option name="option" value="amin">Change pitch min</option>' +
-                                    '<option name="option" value="amax">Change pitch max</option>' +
-                                    '<option name="option" value="cf">Change capture frequency</option>' +
-                                    '</select>' +
-                                    '<input id="Box" value="" type="text" disabled >' +
-                                    '<form>' +
-                                    '<th><br><input type = "submit" class="btn-danger" value = "Confirm values" onclick = "updates();"></th>' +
-                                    '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
-                                    '</form>';
-
-                            }
+                    //query for capture all specifc tech info from sensor
+                    $query = "SELECT * FROM techspecifications WHERE sensor_id ='" + idSensor + "'";
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
                         }
+                        var table = document.getElementById("nv_table");
 
+                        //time out to get the doc ready
+                        //displaying sensor technical info 
                         setTimeout(function() {
-                            document.getElementById("commands").onchange = function() {
-                                var box = document.getElementById("Box");
-
-                                box.setAttribute("disabled", "disabled");
-                                switch (this.value) {
-
-                                    case 'amin':
-                                        box.style.visibility = "visible";
-                                        box.removeAttribute("disabled");
-                                        box.value = result[0].pitch_min;
-                                        break;
-                                    case 'amax':
-                                        box.style.visibility = "visible";
-                                        box.removeAttribute("disabled");
-                                        box.value = result[0].pitch_max;
-                                        break;
-                                    case 'cf':
-                                        box.style.visibility = "visible";
-                                        box.removeAttribute("disabled");
-                                        box.value = result[0].capt_freq
-                                        break;
-                                    default:
-                                        box.style.visibility = "visible";
-                                        box.value = ''
-                                        break;
+                            for (var i = 0, row; row = table.rows[i]; i++) {
+                                for (var j = 0, col; col = row.cells[j]; j++) {
+                                    table.innerHTML =
+                                        '<tr><th> Sensor: </th><td>' + result[0].sensor_id + '</td></tr>' +
+                                        '<tr><th> Serial number: </th><td>' + result[0].serial_number + '</td></tr>' +
+                                        '<tr><th> Actual Communication Service: </th><td>' + result[0].communication + '</td></tr>' +
+                                        '<tr><th> Alarm type: </th><td>' + result[0].alarm_id + '</td></tr>' +
+                                        '<tr><th> Maximun len lenght: </th><td>' + result[0].camera_len_lenght + '</td></tr>' +
+                                        '<tr><th> Battery Capacity: </th><td>' + result[0].battery_capacity + '</td></tr>' +
+                                        '<th><button id="config" class="btn-danger" onclick="configMenu();"> Configurate Sensor </button></th>' +
+                                        '<input type="hidden" id="SI" value="' + result[0].sensor_id + '">';
                                 }
-                            };
+                            }
                         }, 200);
-                    }, 200);
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            }
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
 
-            function updates() {
-                var valor = document.getElementById("commands").value;
-                var idSensor = document.getElementById("idSensor").value;
-                switch (valor) {
-                    case 'amin':
-                        updatePitchMin(idSensor);
-                        break;
-                    case 'amax':
-                        updatePitchMax(idSensor);
-                        break;
-                    case 'cf':
-                        updateCaptFreq(idSensor);
-                        break;
-                    default:
-                        //pass
-                        break;
-                }
-            }
-
-            function updatePitchMin(idSen) {
-                var amin = document.getElementById('Box').value;
-
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-
-                //iniciar conexao
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
-
-                $query = "UPDATE commands SET pitch_min = '" + amin + "' WHERE commands.sensor_id = '" + idSen + "' ";
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        alert("Query Error.");
-                    }
-                    location.reload();
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            };
-
-            function updatePitchMax(idSen) {
-                var amax = document.getElementById('Box').value;
-
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-
-                //iniciar conexao
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
-
-                $query = "UPDATE commands SET pitch_max = '" + amax + "' WHERE commands.sensor_id = '" + idSen + "' ";
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error.");
-                    }
-                    location.reload();
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            };
-
-
-            function updateCaptFreq(idSen) {
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisordb'
-                });
-
-                //iniciar conexao
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
-
-
-                var capture_frequency = document.getElementById('Box').value;
-                if (capture_frequency >= 60) {
-                    capture_frequency = 59;
                 }
 
-                $query = 'UPDATE property SET value= "' + capture_frequency + '" WHERE propertytype_id = "50" and entity_id = "' + idSen + '"';
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error.");
-                    }
-                    alert("Capture Frequency changed Sucessfuly.");
-                    location.reload();
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
-            };
-
-            function showInfoNV(id) {
-                //show info from DB in NV
-
-                if (document.getElementById("SI").value === "") {
-                    alert("Please, click on the sensor to show its state.")
-                    return;
-                }
-
-                var idSensor = document.getElementById("SI").value;
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisordb'
-                });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
-
-                //query for capture all properties values of instanced sensors
-                $query = "SELECT entitytype.entitytype_name, entity.id, entity.entity_name, propertytype.propertytype_name, property.value FROM entitytype,propertytype, entity, property WHERE entitytype.entitytype_name ='sensor' AND entity.entitytype_id = entitytype.id and propertytype.entitytype_id = entitytype.id and property.entity_id = entity.id and property.propertytype_id = propertytype.id and entity.id = '" + idSensor + "'";
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
-                    }
-                    // capture particular sensor properties 
-                    for (i in result) {
-
-                        switch (result[i].propertytype_name) {
-                            case 'longitude':
-                                var longitude = result[i].value;
-                                break;
-                            case 'latitude':
-                                var latitude = result[i].value;
-                                break;
-                            case 'capt_freq':
-                                var capt_freq = result[i].value;
-                                break;
-                            case 'battery':
-                                var battery = result[i].value;
-                                break;
-                            case 'response_team':
-                                var response_team = result[i].value;
-                                break;
-                            case 'time_stamp':
-                                var time_stamp = result[i].value;
-                                break;
-                            default:
-                                break;
+                function configMenu() {
+                    //show info from DB in NV
+                    var idSensor = document.getElementById("SI").value;
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
                         }
-                    }
-                    var table = document.getElementById("nv_table");
+                        console.log("Sucessfuly connection");
+                    });
 
-                    //time out to get the doc ready
-                    setTimeout(function() {
-                        for (var i = 0, row; row = table.rows[i]; i++) {
-                            for (var j = 0, col; col = row.cells[j]; j++) {
-                                table.innerHTML =
-                                    '<form><tr><th> Sensor: </th><td id="s-i">' + idSensor + '</td></tr>' +
-                                    '<tr><th> Latitude: </th><td>' + latitude + '</td></tr>' +
-                                    '<tr><th> Longitude: </th><td>' + longitude + '</td></tr>' +
-                                    '<tr><th> Capture Frequency: </th><td id="cf">' + capt_freq + '</td></tr>' +
-                                    '<tr><th> Bateria: </th><td>' + battery + '</td></tr>' +
-                                    '<tr><th> Team: </th> <td><input id="team" type="text" value="' + response_team + '">' + time_stamp + '<br><input type = "submit" class="btn-danger" value = "Update Team"onclick = "updateTeam();"></td>' +
-                                    '<input type="hidden" id="SI" value="' + idSensor + '">' +
-                                    '</form>';
-                            }
+                    //query for capture all posible commands/commands
+                    $query = "SELECT * FROM commands,sensor WHERE sensor_id ='" + idSensor + "'";
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
                         }
-                        changeImg(idSensor, 'buttVis');
-                    }, 200);
-                });
-            }
 
-            function changeImg(id, type) {
-                if (id == "") {
-                    alert("Please, click on the sensor to see the image .")
-                    return;
+                        var table = document.getElementById("nv_table");
+                        var idSensor = result[0].sensor_id;
+                        //time out to get the doc ready
+                        setTimeout(function() {
+                            for (var i = 0, row; row = table.rows[i]; i++) {
+                                for (var j = 0, col; col = row.cells[j]; j++) {
+                                    table.innerHTML =
+                                        '<tr><th> Comandos: </th><td id ="aham"> ' +
+                                        '<select class="btn-danger" id="commands">' +
+                                        '<option name="option" value="nada"></option>' +
+                                        '<option name="option" value="amin">Change pitch min</option>' +
+                                        '<option name="option" value="amax">Change pitch max</option>' +
+                                        '<option name="option" value="cf">Change capture frequency</option>' +
+                                        '</select>' +
+                                        '<input id="Box" value="" type="text" disabled >' +
+                                        '<form>' +
+                                        '<th><br><input type = "submit" class="btn-danger" value = "Confirm values" onclick = "updates();"></th>' +
+                                        '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
+                                        '</form>';
+
+                                }
+                            }
+
+                            setTimeout(function() {
+                                document.getElementById("commands").onchange = function() {
+                                    var box = document.getElementById("Box");
+
+                                    box.setAttribute("disabled", "disabled");
+                                    switch (this.value) {
+
+                                        case 'amin':
+                                            box.style.visibility = "visible";
+                                            box.removeAttribute("disabled");
+                                            box.value = result[0].pitch_min;
+                                            break;
+                                        case 'amax':
+                                            box.style.visibility = "visible";
+                                            box.removeAttribute("disabled");
+                                            box.value = result[0].pitch_max;
+                                            break;
+                                        case 'cf':
+                                            box.style.visibility = "visible";
+                                            box.removeAttribute("disabled");
+                                            box.value = result[0].capt_freq
+                                            break;
+                                        default:
+                                            box.style.visibility = "visible";
+                                            box.value = ''
+                                            break;
+                                    }
+                                };
+                            }, 200);
+                        }, 200);
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
                 }
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisor'
-                });
-                //start connection
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
-                    }
-                    console.log("Sucessfuly connection");
-                });
 
-                //query returns Base64 encode images from db
-                $query = 'SELECT TO_BASE64(visible_img) as vis_base, TO_BASE64(termal_img) as term_base FROM sensor WHERE id =' + id;
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        console.log("Query Error");
-                    }
-                    var imgSensor = document.getElementById("imgIV");
-                    switch (id) {
-                        case '7':
-                            //visible img
-                            if (type == 'buttVis') {
-                                //setting the img -> base64
-                                imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
-                                break;
-                            }
-                            //termal img
-                            imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                function updates() {
+                    var valor = document.getElementById("commands").value;
+                    var idSensor = document.getElementById("idSensor").value;
+                    switch (valor) {
+                        case 'amin':
+                            updatePitchMin(idSensor);
                             break;
-                        case '8':
-                            if (type == 'buttVis') {
-                                imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
-                                break;
-                            }
-                            //termal img
-                            imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                        case 'amax':
+                            updatePitchMax(idSensor);
                             break;
-                        case '9':
-                            if (type == 'buttVis') {
-                                imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
-                                break;
-                            }
-                            //termal img
-                            imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
-                            break;
-                        case '14':
-                            if (type == 'buttVis') {
-                                imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
-                                break;
-                            }
-                            //termal img
-                            imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                        case 'cf':
+                            updateCaptFreq(idSensor);
                             break;
                         default:
-                            console.log("Imagem não acessivel");
-                            imgSensor.src = 'imagens/na.png';
+                            //pass
+                            break;
                     }
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
+                }
 
-            }
+                function updatePitchMin(idSen) {
+                    var amin = document.getElementById('Box').value;
 
-            function updateTeam() {
-                var idSensor = document.getElementById('SI').value;
-                var newTeam = document.getElementById('team').value;
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
 
-                const mysql = require('mysql');
-                const connection = mysql.createConnection({
-                    host: '127.0.0.1',
-                    user: 'root',
-                    password: '',
-                    database: 'nodevisordb'
-                });
+                    //iniciar conexao
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
 
-                //iniciar conexao
-                connection.connect((err) => {
-                    if (err) {
-                        return console.log(err.stack);
+                    $query = "UPDATE commands SET pitch_min = '" + amin + "' WHERE commands.sensor_id = '" + idSen + "' ";
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            alert("Query Error.");
+                        }
+                        location.reload();
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+                };
+
+                function updatePitchMax(idSen) {
+                    var amax = document.getElementById('Box').value;
+
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+
+                    //iniciar conexao
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
+
+                    $query = "UPDATE commands SET pitch_max = '" + amax + "' WHERE commands.sensor_id = '" + idSen + "' ";
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error.");
+                        }
+                        location.reload();
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+                };
+
+
+                function updateCaptFreq(idSen) {
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisordb'
+                    });
+
+                    //iniciar conexao
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
+
+
+                    var capture_frequency = document.getElementById('Box').value;
+                    if (capture_frequency >= 60) {
+                        capture_frequency = 59;
                     }
-                    console.log("Sucessfuly connection");
-                });
 
-                $query = 'UPDATE property SET value= "' + newTeam + '" WHERE propertytype_id = "67" and entity_id = "' + idSensor + '"';
-                connection.query($query, function(err, result, fields) {
-                    if (err) {
-                        alert("Query Error.");
+                    $query = 'UPDATE property SET value= "' + capture_frequency + '" WHERE propertytype_id = "50" and entity_id = "' + idSen + '"';
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error.");
+                        }
+                        alert("Capture Frequency changed Sucessfuly.");
+                        location.reload();
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+                };
+
+                function showInfoNV(id) {
+                    //show info from DB in NV
+
+                    if (document.getElementById("SI").value === "") {
+                        alert("Please, click on the sensor to show its state.")
+                        return;
                     }
-                    alert("Team changed with sucess.");
-                    location.reload();
 
-                });
-                //fechar conexao
-                connection.end(() => {
-                    console.log("Connection closed with sucess.");
-                });
+                    var idSensor = document.getElementById("SI").value;
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisordb'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
+
+                    //query for capture all properties values of instanced sensors
+                    $query = "SELECT entitytype.entitytype_name, entity.id, entity.entity_name, propertytype.propertytype_name, property.value FROM entitytype,propertytype, entity, property WHERE entitytype.entitytype_name ='sensor' AND entity.entitytype_id = entitytype.id and propertytype.entitytype_id = entitytype.id and property.entity_id = entity.id and property.propertytype_id = propertytype.id and entity.id = '" + idSensor + "'";
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
+                        }
+                        // capture particular sensor properties 
+                        for (i in result) {
+
+                            switch (result[i].propertytype_name) {
+                                case 'longitude':
+                                    var longitude = result[i].value;
+                                    break;
+                                case 'latitude':
+                                    var latitude = result[i].value;
+                                    break;
+                                case 'capt_freq':
+                                    var capt_freq = result[i].value;
+                                    break;
+                                case 'battery':
+                                    var battery = result[i].value;
+                                    break;
+                                case 'response_team':
+                                    var response_team = result[i].value;
+                                    break;
+                                case 'time_stamp':
+                                    var time_stamp = result[i].value;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        var table = document.getElementById("nv_table");
+
+                        //time out to get the doc ready
+                        setTimeout(function() {
+                            for (var i = 0, row; row = table.rows[i]; i++) {
+                                for (var j = 0, col; col = row.cells[j]; j++) {
+                                    table.innerHTML =
+                                        '<form><tr><th> Sensor: </th><td id="s-i">' + idSensor + '</td></tr>' +
+                                        '<tr><th> Latitude: </th><td>' + latitude + '</td></tr>' +
+                                        '<tr><th> Longitude: </th><td>' + longitude + '</td></tr>' +
+                                        '<tr><th> Capture Frequency: </th><td id="cf">' + capt_freq + '</td></tr>' +
+                                        '<tr><th> Bateria: </th><td>' + battery + '</td></tr>' +
+                                        '<tr><th> Team: </th> <td><input id="team" type="text" value="' + response_team + '">' + time_stamp + '<br><input type = "submit" class="btn-danger" value = "Update Team"onclick = "updateTeam();"></td>' +
+                                        '<input type="hidden" id="SI" value="' + idSensor + '">' +
+                                        '</form>';
+                                }
+                            }
+                            changeImg(idSensor, 'buttVis');
+                        }, 200);
+                    });
+                }
+
+                function changeImg(id, type) {
+                    if (id == "") {
+                        alert("Please, click on the sensor to see the image .")
+                        return;
+                    }
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisor'
+                    });
+                    //start connection
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
+
+                    //query returns Base64 encode images from db
+                    $query = 'SELECT TO_BASE64(visible_img) as vis_base, TO_BASE64(termal_img) as term_base FROM sensor WHERE id =' + id;
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            console.log("Query Error");
+                        }
+                        var imgSensor = document.getElementById("imgIV");
+                        switch (id) {
+                            case '7':
+                                //visible img
+                                if (type == 'buttVis') {
+                                    //setting the img -> base64
+                                    imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
+                                    break;
+                                }
+                                //termal img
+                                imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                                break;
+                            case '8':
+                                if (type == 'buttVis') {
+                                    imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
+                                    break;
+                                }
+                                //termal img
+                                imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                                break;
+                            case '9':
+                                if (type == 'buttVis') {
+                                    imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
+                                    break;
+                                }
+                                //termal img
+                                imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                                break;
+                            case '14':
+                                if (type == 'buttVis') {
+                                    imgSensor.src = 'data:image/png;base64,' + result[0].vis_base + '';
+                                    break;
+                                }
+                                //termal img
+                                imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
+                                break;
+                            default:
+                                console.log("Imagem não acessivel");
+                                imgSensor.src = 'imagens/na.png';
+                        }
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+
+                }
+
+                function updateTeam() {
+                    var idSensor = document.getElementById('SI').value;
+                    var newTeam = document.getElementById('team').value;
+
+                    const mysql = require('mysql');
+                    const connection = mysql.createConnection({
+                        host: '127.0.0.1',
+                        user: 'root',
+                        password: '',
+                        database: 'nodevisordb'
+                    });
+
+                    //iniciar conexao
+                    connection.connect((err) => {
+                        if (err) {
+                            return console.log(err.stack);
+                        }
+                        console.log("Sucessfuly connection");
+                    });
+
+                    $query = 'UPDATE property SET value= "' + newTeam + '" WHERE propertytype_id = "67" and entity_id = "' + idSensor + '"';
+                    connection.query($query, function(err, result, fields) {
+                        if (err) {
+                            alert("Query Error.");
+                        }
+                        alert("Team changed with sucess.");
+                        location.reload();
+
+                    });
+                    //fechar conexao
+                    connection.end(() => {
+                        console.log("Connection closed with sucess.");
+                    });
+                }
+            </script>
+        </div>
+        <!--Time line-->
+        <label class="text-center"> Time-line </label>
+        <br>
+
+        <div id="slider-timestamp"></div>
+
+        <!--*********************
+        **metodo de full Screen**
+        **********************-->
+        <script>
+            function FullscreenMV() {
+                var e2 = document.getElementById("MV");
+                if (document.fullscreenElement === null) {
+                    if (e2.requestFullscreen) {
+                        e2.requestFullscreen();
+                    } else if (e2.mozRequestFullScreen) { /* Firefox */
+                        e2.mozRequestFullScreen();
+                    } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                        e2.webkitRequestFullscreen();
+                    } else if (e2.msRequestFullscreen) { /* IE/Edge */
+                        e2.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
             }
         </script>
-    </div>
-    <!--Time line-->
-    <label class="text-center"> Time-line </label>
-    <br>
-
-    <div id="slider-timestamp"></div>
-
-    <!--*********************
-        **metodo de full Screen**
-        **********************-->
-    <script>
-        function FullscreenMV() {
-            var e2 = document.getElementById("MV");
-            if (document.fullscreenElement === null) {
-                if (e2.requestFullscreen) {
-                    e2.requestFullscreen();
-                } else if (e2.mozRequestFullScreen) { /* Firefox */
-                    e2.mozRequestFullScreen();
-                } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                    e2.webkitRequestFullscreen();
-                } else if (e2.msRequestFullscreen) { /* IE/Edge */
-                    e2.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        }
-    </script>
-    <!-- NodeVisor -->
-    <div id="NV" class="nodeVisor">
-        <!-- OPTIONS-->
-        <button type="button" class="btn
+        <!-- NodeVisor -->
+        <div id="NV" class="nodeVisor">
+            <!-- OPTIONS-->
+            <button type="button" class="btn
                     btn-outline-danger" onclick="showInfoNV();">State</button>
-        <button type="button" class="btn
+            <button type="button" class="btn
                     btn-outline-danger" onclick="showSpecifSensorNV();">Configurations</button>
-        <input type="hidden" id="SI" value="">
+            <input type="hidden" id="SI" value="">
 
-        <button id="fullscream" class="btn
+            <button id="fullscream" class="btn
                     btn-outline-danger" onclick="FullscreenNV();">Fullscreen
                     Mode</button>
-        <h4 class="text-center">NodeVisor</h4>
-        <table id="nv_table" value="valor da tabela" style="width:100%">
-            <tr>
-                <th></th>
-            </tr>
-        </table>
-    </div>
-    <!--*********************
+            <h4 class="text-center">NodeVisor</h4>
+            <table id="nv_table" value="valor da tabela" style="width:100%">
+                <tr>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+        <!--*********************
         **metodo de full Screen**
         **********************-->
-    <script>
-        function FullscreenNV() {
-            var e2 = document.getElementById("NV");
-            if (document.fullscreenElement === null) {
-                if (e2.requestFullscreen) {
-                    e2.requestFullscreen();
-                } else if (e2.mozRequestFullScreen) { /* Firefox */
-                    e2.mozRequestFullScreen();
-                } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                    e2.webkitRequestFullscreen();
-                } else if (e2.msRequestFullscreen) { /* IE/Edge */
-                    e2.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
+        <script>
+            function FullscreenNV() {
+                var e2 = document.getElementById("NV");
+                if (document.fullscreenElement === null) {
+                    if (e2.requestFullscreen) {
+                        e2.requestFullscreen();
+                    } else if (e2.mozRequestFullScreen) { /* Firefox */
+                        e2.mozRequestFullScreen();
+                    } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                        e2.webkitRequestFullscreen();
+                    } else if (e2.msRequestFullscreen) { /* IE/Edge */
+                        e2.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
                 }
             }
-        }
-    </script>
-    <!-- ImageVisor -->
-    <div id="IV" class="imageVisor">
-        <!-- OPTIONS-->
-        <button id="buttVis" type="button" class="btn
+        </script>
+        <!-- ImageVisor -->
+        <div id="IV" class="imageVisor">
+            <!-- OPTIONS-->
+            <button id="buttVis" type="button" class="btn
                     btn-outline-danger">Visible Image</button>
-        <button id="buttTerm" type="button" class="btn
+            <button id="buttTerm" type="button" class="btn
                     btn-outline-danger">Termal Image</button>
-        <input type="hidden" id="imgs" value="">
-        <button id="fullscream" class="btn
+            <input type="hidden" id="imgs" value="">
+            <button id="fullscream" class="btn
                     btn-outline-danger" onclick="FullscreenIV();">Fullscreen
                     Mode</button>
-        <h4 class="text-center">ImageVisor</h4>
-        <img id="imgIV" width="100%" height="100%" />
+            <h4 class="text-center">ImageVisor</h4>
+            <img id="imgIV" width="100%" height="100%" />
 
-    </div>
-    <!--*********************
+        </div>
+        <!--*********************
         **metodo de full Screen**
         **********************-->
-    <script>
-        //clicking the button -> call function -> 2 different ways -> same result
-        document.getElementById('buttVis').onclick = function() {
-            var id = document.getElementById('SI').value;
-            changeImg(id, 'buttVis');
-        }
-        document.getElementById('buttTerm').addEventListener('click', function() {
-            var id = document.getElementById('SI').value;
-            changeImg(id, 'buttTerm');
-        }, false);
+        <script>
+            //clicking the button -> call function -> 2 different ways -> same result
+            document.getElementById('buttVis').onclick = function() {
+                var id = document.getElementById('SI').value;
+                changeImg(id, 'buttVis');
+            }
+            document.getElementById('buttTerm').addEventListener('click', function() {
+                var id = document.getElementById('SI').value;
+                changeImg(id, 'buttTerm');
+            }, false);
 
-        function FullscreenIV() {
-            var e2 = document.getElementById("IV");
-            if (document.fullscreenElement === null) {
-                if (e2.requestFullscreen) {
-                    e2.requestFullscreen();
-                } else if (e2.mozRequestFullScreen) { /* Firefox */
-                    e2.mozRequestFullScreen();
-                } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                    e2.webkitRequestFullscreen();
-                } else if (e2.msRequestFullscreen) { /* IE/Edge */
-                    e2.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
+            function FullscreenIV() {
+                var e2 = document.getElementById("IV");
+                if (document.fullscreenElement === null) {
+                    if (e2.requestFullscreen) {
+                        e2.requestFullscreen();
+                    } else if (e2.mozRequestFullScreen) { /* Firefox */
+                        e2.mozRequestFullScreen();
+                    } else if (e2.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                        e2.webkitRequestFullscreen();
+                    } else if (e2.msRequestFullscreen) { /* IE/Edge */
+                        e2.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
                 }
             }
-        }
-    </script>
-    </div>
-    <script src="./teste.js"></script>  
-</body>
-    
+        </script>
+        </div>
+        <script src="./teste.js"></script>
+    </body>
+
 </html>
