@@ -99,18 +99,6 @@
                     fullscreenControl: true,
                 });
 
-                //Polygon - Fire zone
-                /*var polygon = L.polygon([
-                    [32.751589401074156, -16.893112091737557], // start point
-                    [32.751819589648335, -16.920664420821403],
-                    [32.76159954908414, -16.94118391324711, ],
-                    [32.73215569845409, -16.926709719676907],
-                    [32.751589401074156, -16.893112091737557] // end point = start point
-                ], {
-                    fillColor: 'yellow',
-                    fillOpacity: 0.5,
-                }).addTo(mymap);*/
-
                 mymap.on('click', function(e) {
                     console.log("[" + e.latlng.lat + ", " + e.latlng.lng + "]")
                 });
@@ -135,11 +123,11 @@
                         color: 'red',
                         fillColor: 'red',
                         weight: 3,
-                        smoothFactor: 0
+                        smoothFactor: 1
                     },
                     polyline: {
                         color: '#D55F04',
-                        smoothFactor: 0
+                        smoothFactor: 1
                     },
                     simplify_tolerance: 0.001,
                     merge_polygons: true,
@@ -160,7 +148,7 @@
                     merge_polygons: true,
                     concave_polygons: false
                 });
-
+                console.log(fireLines)
 
                 //change draw mode
                 document.getElementById('mode').onchange = function() {
@@ -174,7 +162,10 @@
                             shadowLines.setMode('view');
                             fireLines.setMode('add');
                             fireLinesGroup.addLayer(fireLines).addTo(mymap);
-                            console.log(fireLinesGroup);
+
+                            fireLines.on('layeradd', function(data) {
+                                console.log('Terminei o desenho');
+                            });
                             break;
                         case 'draw-sl':
                             shadowLines.addTo(mymap);
@@ -188,7 +179,9 @@
                         default:
                             break;
                     }
+                    console.log(fireLinesGroup);
                 };
+
 
                 //get all sensors from DB and visualize them in mymap
                 getInstances();
