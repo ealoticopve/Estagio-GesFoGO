@@ -1,6 +1,12 @@
+@import "compass/css3";
+body {
+    background: #ccc;
+}
+
 .timeline-wrapper {
     display: block;
     width: 90%;
+    height: 15rem;
     position: relative;
     color: #fff;
     text-align: center;
@@ -26,16 +32,17 @@
 }
 
 .timeline-wrapper .timeline-content-item {
-    background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
-    width: 30%;
+    background: url(data:image/gif;
+ base64, R0lGODlhAQABAIAAAAAAAP ///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+    width: 6%;
     display: inline-block;
     position: relative;
     height: 100%;
     margin-right: -5px;
-    -webkit-transition: width .5s;
-    -moz-transition: width .5s;
-    -o-transition: width .5s;
-    transition: width .5s;
+    -webkit-transition: width 0.5s;
+    -moz-transition: width 0.5s;
+    -o-transition: width 0.5s;
+    transition: width 0.5s;
     z-index: 1;
 }
 
@@ -45,7 +52,7 @@
     font-weight: bold;
     position: absolute;
     top: 50%;
-    margin-top: -.25em;
+    margin-top: -0.25em;
     width: 100%;
     text-shadow: 0 0 2px black;
     cursor: pointer;
@@ -54,10 +61,10 @@
 .timeline-wrapper .timeline-content-item>span:before {
     content: " ";
     display: block;
-    width: .5em;
-    height: .5em;
+    width: 0.5em;
+    height: 0.5em;
     background: white;
-    margin: 0 auto .5em auto;
+    margin: 0 auto 0.5em auto;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
@@ -114,11 +121,11 @@
 
 .timeline-wrapper .timeline-content-item .timeline-content-item-reveal a span:after {
     content: "\203A";
-    margin-left: .3em;
+    margin-left: 0.3em;
 }
 
 .timeline-wrapper .timeline-content-item.active {
-    width: 15%;
+    width: 10%;
 }
 
 .timeline-wrapper .timeline-content-item.active .timeline-content-item-reveal {
