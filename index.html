@@ -365,7 +365,7 @@
                 //sensorGroup = L.layerGroup(sensores).addTo(mymap);
                 var layerGroups = {
                     "Sensors": sensorGroup,
-                    "Fire lines": layersGeoJSON
+                    "Fire lines": fireLinesGroup
                 }
                 var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
 
@@ -1009,7 +1009,7 @@
             }
         </script>
         </div>
-        <script src="./teste.js"></script>
+        <script src="./timeline.js"></script>
     </body>
 
 </html>
