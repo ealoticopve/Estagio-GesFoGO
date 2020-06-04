@@ -17,7 +17,7 @@ function displayGeoDataTimeLine() {
     });
 
     //query for capture all properties values of instanced sensors
-    query = "SELECT id, sensor_id as 'si', date, AsText(`firelines_coords`) as 'coords', TO_BASE64(img) as 'img' FROM timeline_info"
+    query = "SELECT id, sensor_id as 'si', DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s')  as 'date', AsText(`firelines_coords`) as 'coords', TO_BASE64(img) as 'img' FROM timeline_info"
     connection.query(query, function(err, result, fields) {
         if (err) {
             console.log(err);
@@ -42,7 +42,6 @@ function displayGeoDataTimeLine() {
 
     setTimeout(function() {
         var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 1, timeAttribute: "time" });
-        sliderControl.options.follow = 1;
         mymap.addControl(sliderControl);
         sliderControl.startSlider();
         var imgSensor = document.getElementById("imgIV");
