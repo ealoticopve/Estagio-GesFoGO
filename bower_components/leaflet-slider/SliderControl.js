@@ -280,7 +280,7 @@ L.Control.SliderControl = L.Control.extend({
         if (options.isEpoch) {
             time = (new Date(parseInt(time))).toString(); // this is local time
         }
-        return time.substr(options.startTimeIdx, options.startTimeIdx + options.timeStrLength);
+        return time.toString().substr(options.startTimeIdx, options.startTimeIdx + options.timeStrLength);
     },
 
     setPosition: function(position) {
