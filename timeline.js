@@ -1,4 +1,58 @@
 function displayGeoDataTimeLine() {
+    var SensorID = document.getElementById("SI").value;
+    var polygon;
+    if (SensorID == "") {
+        showTimeLinePolygons();
+    }
+    setTimeout(function() {
+        var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 1, timeAttribute: "time" });
+        mymap.addControl(sliderControl);
+        sliderControl.startSlider();
+
+        sliderControl.on('rangechanged', function(e) {
+            var SensorID = document.getElementById("SI").value;
+            if (SensorID == "") {
+                showTimeLinePolygons();
+            } else {
+                console.log("muda foto");
+                showTimeLineImg(SensorID, e.markers[0].options.time);
+            }
+        });
+    }, 1000)
+
+}
+
+displayGeoDataTimeLine();
+
+function showTimeLineImg(SensorID, date) {
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'nodevisor'
+    });
+    var imgSensor = document.getElementById("imgIV");
+    query = "SELECT TO_BASE64(timeline_sensor_captures.img) as 'img' FROM timeline_info, timeline_sensor_captures WHERE timeline_sensor_captures.sensor_id = '" + SensorID + "' AND timeline_sensor_captures.timeline_info_id = timeline_info.id and timeline_info.date ='" + date + "'";
+    connection.query(query, function(err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+            if (result.length == 0) {
+                imgSensor.src = "#";
+            } else {
+                imgSensor.src = 'data:image/png;base64,' + result[0].img + '';
+            }
+        }
+    });
+    //close 1st connection
+    connection.end(() => {
+        console.log("Connection closed with sucess.");
+    });
+}
+
+function showTimeLinePolygons() {
     var LatLng = [];
     var Coordenadas = [];
     const mysql = require('mysql');
@@ -8,17 +62,8 @@ function displayGeoDataTimeLine() {
         password: '',
         database: 'nodevisor'
     });
-    //start connection
-    connection.connect((err) => {
-        if (err) {
-            return console.log(err.stack);
-        }
-        console.log("Sucessfuly connection");
-    });
-
-    //query for capture all properties values of instanced sensors
-    query = "SELECT id, sensor_id as 'si', DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s')  as 'date', AsText(`firelines_coords`) as 'coords', TO_BASE64(img) as 'img' FROM timeline_info"
-    connection.query(query, function(err, result, fields) {
+    query = "SELECT DATE_FORMAT(timeline_info.date, '%Y-%m-%d %H:%i:%s') as 'date', AsText(timeline_info.firelines_coords) as 'coords' FROM timeline_info";
+    connection.query(query, function(err, result) {
         if (err) {
             console.log(err);
         } else {
@@ -34,33 +79,15 @@ function displayGeoDataTimeLine() {
                 var polygon = L.polygon(LatLng, { color: 'red', time: result[i].date }, { alwaysShowDate: true })
                 layersGeoJSON.addLayer(polygon);
                 LatLng = [];
-                polygon.id = result[i].id;
-                polygon.img = result[i].img;
+                polygon.id = result[i].date;
             }
         }
     });
-
-    setTimeout(function() {
-        var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 1, timeAttribute: "time" });
-        mymap.addControl(sliderControl);
-        sliderControl.startSlider();
-        var imgSensor = document.getElementById("imgIV");
-        sliderControl.on('rangechanged', function(e) {
-            imgSensor.src = 'data:image/png;base64,' + e.markers[0].img + '';
-            console.log("muda foto");
-        });
-    }, 1000)
-
     //close 1st connection
     connection.end(() => {
         console.log("Connection closed with sucess.");
     });
-
 }
-
-displayGeoDataTimeLine();
-
-
 /*******************
 * INSERT Polygons DB
 ********************
