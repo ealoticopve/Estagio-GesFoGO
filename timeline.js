@@ -1,6 +1,5 @@
 function displayGeoDataTimeLine() {
-    var SensorID = document.getElementById("SI").value;
-    var polygon;
+    var SensorID = document.getElementById("SI").value;;
     if (SensorID == "") {
         showTimeLinePolygons();
     }
@@ -11,9 +10,7 @@ function displayGeoDataTimeLine() {
 
         sliderControl.on('rangechanged', function(e) {
             var SensorID = document.getElementById("SI").value;
-            if (SensorID == "") {
-                showTimeLinePolygons();
-            } else {
+            if (SensorID != "") {
                 console.log("muda foto");
                 showTimeLineImg(SensorID, e.markers[0].options.time);
             }
@@ -88,6 +85,36 @@ function showTimeLinePolygons() {
         console.log("Connection closed with sucess.");
     });
 }
+
+function configTimeline() {
+    var win = L.control.window(map, {
+        title: 'Timeline Configuration',
+        maxWidth: 450,
+        modal: false,
+        closeButton: false,
+    });
+    var content = "<form><label>Timeline init:</label><br><input type='datetime-local' id='timeline-init'><br><br><label>Timeline end:</label><br><input type='datetime-local' id='timeline-end'><br><br><label>Step:</label><br><input type='number' id='step' min='5' max='1440'><label> minutes</label><br><label>(max value: 1440 - 1 day)</label></form>";
+    win.content(content);
+    win.prompt({
+        callback: function() {
+            setTimeout(function() {
+                var a = document.getElementById('timeline-init')
+                console.log(a)
+            }, 500)
+
+        },
+        buttonOK: "Confirm values",
+        buttonCancel: "Cancel configuration"
+    });
+    win.showOn([0, 0]); //show window in top-left side
+
+
+}
+
+
+
+
+
 /*******************
 * INSERT Polygons DB
 ********************
