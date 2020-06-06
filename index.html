@@ -1058,6 +1058,9 @@
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "block";
                     }
+                    if(document.getElementById('mode').value == 'draw-fl'){
+                        fireLines.setMode('add');
+                    }
                     document.getElementById("drawfl").disabled = false;
                 }
                 
@@ -1075,6 +1078,9 @@
                 }else{
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "block";
+                    }
+                    if(document.getElementById('mode').value == 'draw-sl'){
+                        shadowLines.setMode('add');
                     }
                     document.getElementById("drawsl").disabled = false;
                 }
