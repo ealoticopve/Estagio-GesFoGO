@@ -1,3 +1,18 @@
+.dropdown {list-style: none; background: #17a2b8; border-radius: 9px;}
+.dropdown .nav-link {color:#fff; text-decoration: none;}
+.dropdown .dropdown-menu a{color: #fff; text-decoration: none;}
+.dropdown .btn {background: #17a2b8; color:#fff; border-radius: 9px;}
+.dropdown .btn:hover {background: #17a2b8; color:#fff; border-radius: 9px;} 
+.dropdown-item {background: #17a2b8; color:#fff; border-radius: 9px;} 
+.dropdown .btn:active {background: #17a2b8; color:#fff; border-radius: 9px;}
+.dropdown .btn:focus {background: #17a2b8; color:#fff; border-radius: 9px;}
+.dropdown .input {background: #17a2b8; color:#fff; border-radius: 9px;}
+.container .dropdown .dropdown-menu a:hover
+{
+  color: #fff;
+  border-color: #fff;
+}
+
 #team {
     margin-top: 10px;
     margin-right: 10px;
@@ -75,7 +90,7 @@ a {
 
 #map {
     position: relative;
-    Height: 100%;
+    Height: 89%;
     Width: 100%;
     top: 40px;
 }

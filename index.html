@@ -71,8 +71,8 @@
                 <h5> Draw Tools</h5>
                 <select id='mode' class="btn-danger custom-select">
                         <option value="nothing"></option>
-                        <option value="draw-fl">Draw Fire lines</option>
-                        <option value="draw-sl">Draw Shadow lines</option>
+                        <option id="drawfl" value="draw-fl">Draw Fire lines</option>
+                        <option id="drawsl" value="draw-sl">Draw Shadow lines</option>
                         <option value="delete">Delete lines</option>
                     </select>
 
@@ -89,6 +89,7 @@
                 var sensor; //variable that represent a sensor
                 var sensorGroup = L.layerGroup(); //sensors layers
                 var fireLinesGroup = L.layerGroup(); //fire lines layers
+                var shadowLinesGroup = L.layerGroup(); //shadow lines layers
                 var layersGeoJSON = L.layerGroup(); //timeline polygons
                 //my leaflet map
                 var mymap = L.map('map', {
@@ -119,6 +120,7 @@
                 require('leaflet-freehandshapes');
                 var fireLines = new L.FreeHandShapes({
                     polygon: {
+                        className: 'fireLine',
                         color: 'red',
                         fillColor: 'red',
                         weight: 3,
@@ -134,6 +136,7 @@
                 });
                 var shadowLines = new L.FreeHandShapes({
                     polygon: {
+                        className: 'shadowLine',
                         color: '#8F6F56',
                         fillColor: '#8F6F56',
                         weight: 3,
@@ -160,15 +163,23 @@
                             shadowLines.setMode('view');
                             fireLines.setMode('add');
                             fireLinesGroup.addLayer(fireLines).addTo(mymap);
-
                             fireLines.on('layeradd', function(data) {
+                                var checkbox = document.getElementById('inputFireLine');
+                                checkbox.checked = true;
+                                hideFireLines();
                                 console.log('Terminei o desenho');
                             });
                             break;
                         case 'draw-sl':
-                            shadowLines.addTo(mymap);
                             fireLines.setMode('view');
                             shadowLines.setMode('add');
+                            shadowLinesGroup.addLayer(shadowLines).addTo(mymap);
+                            shadowLines.on('layeradd', function(data) {
+                                var checkbox = document.getElementById('inputShadowLine');
+                                checkbox.checked = true;
+                                hideShadowLines();
+                                console.log('Terminei o desenho');
+                            });
                             break;
                         case 'delete':
                             fireLines.setMode('delete');
@@ -359,11 +370,9 @@
 
                 //sensorGroup = L.layerGroup(sensores).addTo(mymap);
                 var layerGroups = {
-                    "Sensors": sensorGroup,
-                    "Fire lines": fireLinesGroup
+                    "Sensors": sensorGroup
                 }
                 var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
-
                 mymap.on('overlayadd', function() {
                     sensorGroup.eachLayer(function(layer) {
                         layer.setDraggable(false)
@@ -985,6 +994,10 @@
             <img id="imgIV" width="100%" height="100%" />
 
         </div>
+        <!--<label for="">Fire Lines</label>
+        <input type="checkbox" id="inputFireLine" onclick="hideFireLines()" name="Fire Lines" checked>
+        <label for="">Shadow Lines</label>
+        <input type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>-->
         <!--*********************
         **metodo de full Screen**
         **********************-->
@@ -1021,6 +1034,69 @@
                     } else if (document.msExitFullscreen) {
                         document.msExitFullscreen();
                     }
+                }
+            }
+        </script>
+        <script>
+            var command = L.control({position: 'topleft'});
+            command.onAdd = function (mymap) {
+                var div = L.DomUtil.create('div');
+                div.innerHTML = `
+                <div class="dropdown text-center">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Hide Layers
+                </button>
+                <div class="dropdown-menu btn btn-info text-center">
+                <div class="dropdown-item btn btn-info text-center">
+                    <label>Fire Lines</label>
+                    <input class="dropdown-item" type="checkbox" id="inputFireLine" onclick="hideFireLines()" name="Fire Lines" checked>
+                </div>
+                <div class="dropdown-item btn btn-info text-center">
+                    <label>Shadow Lines</label>
+                    <input class="dropdown-item" type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>
+                </div>
+                </div>
+                </div>
+                `;
+                div.ondblclick = (e) => {
+                    e.stopPropagation();
+                };
+                return div;
+            };
+            command.addTo(mymap); //your map variable
+            function hideFireLines(){
+                var checkbox = document.getElementById('inputFireLine');
+                var x = document.getElementsByClassName("fireLine");
+                var i;
+                if(checkbox.checked != true){
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                    fireLines.setMode('view');
+                    document.getElementById("drawfl").disabled = true;
+                }else{
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "block";
+                    }
+                    document.getElementById("drawfl").disabled = false;
+                }
+                
+            }
+            function hideShadowLines(){
+                var checkbox = document.getElementById('inputShadowLine');
+                var x = document.getElementsByClassName("shadowLine");
+                var i;
+                if(checkbox.checked != true){
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                    shadowLines.setMode('view');
+                    document.getElementById("drawsl").disabled = true;
+                }else{
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "block";
+                    }
+                    document.getElementById("drawsl").disabled = false;
                 }
             }
         </script>
