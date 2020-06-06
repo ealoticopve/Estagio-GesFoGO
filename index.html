@@ -875,10 +875,30 @@
         </div>
         <!--Time line-->
         <label class="text-center"> Time-line </label><br>
-        <button id="conf_timeline" class="btn
-                btn-outline-danger" onclick="configTimeline()">Configure
+        <button id="conf_timeline" class="btn btn-outline-danger">Configure
                 timeline</button>
         <br>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form>
+                    <label>Timeline init:</label>
+                    <br><input type='datetime-local' id='timeline-init'><br><br>
+                    <label>Timeline end:</label><br>
+                    <input type='datetime-local' id='timeline-end'><br><br>
+                    <label>Step:</label><br>
+                    <input type='number' id='step' min='5' max='1440'>
+                    <label>minutes</label><br>
+                    <label>(max value: 1440 - 1 day)</label>
+                    <input id="confirmTimeline" type='submit' value="Confirm
+                            values"><br><br>
+                </form>
+            </div>
+        </div>
+
+
 
         <div id="slider-timestamp"></div>
 

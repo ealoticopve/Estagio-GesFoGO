@@ -12,12 +12,14 @@ function displayGeoDataTimeLine() {
             var SensorID = document.getElementById("SI").value;
             if (SensorID != "") {
                 console.log("muda foto");
+                document.getElementById("conf_timeline").style.display = "block";
                 showTimeLineImg(SensorID, e.markers[0].options.time);
             }
         });
     }, 1000)
 
 }
+
 
 displayGeoDataTimeLine();
 
@@ -86,34 +88,55 @@ function showTimeLinePolygons() {
     });
 }
 
-function configTimeline() {
-    var win = L.control.window(map, {
-        title: 'Timeline Configuration',
-        maxWidth: 450,
-        modal: false,
-        closeButton: false,
-    });
-    var content = "<form><label>Timeline init:</label><br><input type='datetime-local' id='timeline-init'><br><br><label>Timeline end:</label><br><input type='datetime-local' id='timeline-end'><br><br><label>Step:</label><br><input type='number' id='step' min='5' max='1440'><label> minutes</label><br><label>(max value: 1440 - 1 day)</label></form>";
-    win.content(content);
-    win.prompt({
-        callback: function() {
-            setTimeout(function() {
-                var a = document.getElementById('timeline-init')
-                console.log(a)
-            }, 500)
+document.getElementById("confirmTimeline").addEventListener("click", function updateTimeline() {
+    var timelineInit = document.getElementById("timeline-init").value;
+    var timelineEnd = document.getElementById("timeline-end").value;
+    var step = document.getElementById("step").value;
 
-        },
-        buttonOK: "Confirm values",
-        buttonCancel: "Cancel configuration"
-    });
-    win.showOn([0, 0]); //show window in top-left side
+    timelineInit = timelineInit.split("T");
+    timelineEnd = timelineEnd.split("T");
+    if (timelineInit != "" && timelineEnd != "" && step != "") {
+        if (step <= 1440) {
+            const mysql = require('mysql');
+            const connection = mysql.createConnection({
+                host: '127.0.0.1',
+                user: 'root',
+                password: '',
+                database: 'nodevisor'
+            });
+            query = "UPDATE timeline_info SET timeline_init = '" + timelineInit[0] + " " + timelineInit[1] + ":00', timeline_end = '" + timelineEnd[0] + " " + timelineEnd[1] + ":00', step = '" + step + "' WHERE campaign_id = '1';";
+            alert(timelineInit);
+            alert(query);
+            connection.query(query, function(err, result) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+            connection.end(() => {
+                console.log("Connection closed with sucess.");
+            });
+        }
+    }
+});
+
+var btn = document.getElementById("conf_timeline");
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
 
 
+btn.onclick = function() {
+    modal.style.display = "block";
 }
 
+span.onclick = function() {
+    modal.style.display = "none";
+}
 
-
-
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 /*******************
 * INSERT Polygons DB
