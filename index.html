@@ -89,6 +89,7 @@
                 var sensor; //variable that represent a sensor
                 var sensorGroup = L.layerGroup(); //sensors layers
                 var fireLinesGroup = L.layerGroup(); //fire lines layers
+                var shadowLinesGroup = L.layerGroup(); //shadow lines layers
                 var layersGeoJSON = L.layerGroup(); //timeline polygons
                 //my leaflet map
                 var mymap = L.map('map', {
@@ -119,6 +120,7 @@
                 require('leaflet-freehandshapes');
                 var fireLines = new L.FreeHandShapes({
                     polygon: {
+                        className: 'fireLine',
                         color: 'red',
                         fillColor: 'red',
                         weight: 3,
@@ -134,6 +136,7 @@
                 });
                 var shadowLines = new L.FreeHandShapes({
                     polygon: {
+                        className: 'shadowLine',
                         color: '#8F6F56',
                         fillColor: '#8F6F56',
                         weight: 3,
@@ -161,15 +164,23 @@
                             shadowLines.setMode('view');
                             fireLines.setMode('add');
                             fireLinesGroup.addLayer(fireLines).addTo(mymap);
-
                             fireLines.on('layeradd', function(data) {
+                                var checkbox = document.getElementById('inputFireLine');
+                                checkbox.checked = true;
+                                hideFireLines();
                                 console.log('Terminei o desenho');
                             });
                             break;
                         case 'draw-sl':
-                            shadowLines.addTo(mymap);
                             fireLines.setMode('view');
                             shadowLines.setMode('add');
+                            shadowLinesGroup.addLayer(shadowLines).addTo(mymap);
+                            shadowLines.on('layeradd', function(data) {
+                                var checkbox = document.getElementById('inputShadowLine');
+                                checkbox.checked = true;
+                                hideShadowLines();
+                                console.log('Terminei o desenho');
+                            });
                             break;
                         case 'delete':
                             fireLines.setMode('delete');
@@ -969,6 +980,10 @@
             <img id="imgIV" width="100%" height="100%" />
 
         </div>
+        <label for="">Fire Lines</label>
+        <input type="checkbox" id="inputFireLine" onclick="hideFireLines()" name="Fire Lines" checked>
+        <label for="">Shadow Lines</label>
+        <input type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>
         <!--*********************
         **metodo de full Screen**
         **********************-->
@@ -1004,6 +1019,36 @@
                         document.webkitExitFullscreen();
                     } else if (document.msExitFullscreen) {
                         document.msExitFullscreen();
+                    }
+                }
+            }
+        </script>
+        <script>
+            function hideFireLines(){
+                var checkbox = document.getElementById('inputFireLine');
+                var x = document.getElementsByClassName("fireLine");
+                var i;
+                if(checkbox.checked != true){
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                }else{
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "block";
+                    }
+                }
+            }
+            function hideShadowLines(){
+                var checkbox = document.getElementById('inputShadowLine');
+                var x = document.getElementsByClassName("shadowLine");
+                var i;
+                if(checkbox.checked != true){
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "none";
+                    }
+                }else{
+                    for (i = 0; i < x.length; i++) {
+                        x[i].style.display = "block";
                     }
                 }
             }
