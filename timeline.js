@@ -73,11 +73,7 @@ function showTimeLinePolygons() {
                     Coordenadas = [coordenadas[1], coordenadas[0]]
                     LatLng.push(Coordenadas);
                 }
-<<<<<<< HEAD
                 var polygon = L.polygon(LatLng, { className: 'fireLine', color: 'red', time: result[i].date}, {alwaysShowDate: true })
-=======
-                var polygon = L.polygon(LatLng, { color: 'red', time: result[i].date }, { alwaysShowDate: true })
->>>>>>> ac0b1da4133cb8218a0cc860e8f2aa7e395ec4cc
                 layersGeoJSON.addLayer(polygon);
                 LatLng = [];
                 polygon.id = result[i].date;
