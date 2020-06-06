@@ -150,7 +150,6 @@
                     merge_polygons: true,
                     concave_polygons: false
                 });
-                console.log(fireLines)
 
                 //change draw mode
                 document.getElementById('mode').onchange = function() {
@@ -189,7 +188,6 @@
                         default:
                             break;
                     }
-                    console.log(fireLinesGroup);
                 };
 
 
@@ -314,8 +312,6 @@
                                         idOpenedSensor = this.options.id;
                                         openedSensorFieldOfView = openedSensor.getFieldOfView();
                                         openedSensorTargetLatLng = openedSensor.getTargetLatLng();
-                                        console.log(openedSensorFieldOfView);
-                                        console.log(openedSensorTargetLatLng);
                                         this.setDraggable(true)
                                         this._cameraMarker.dragging.disable()
                                         this._targetMarker.dragging.enable()
@@ -336,7 +332,6 @@
                                         });
                                         win.show();
                                         win.showOn([0, 0]); //show window in top-left side
-                                        console.log(win)
                                     } else {
                                         if (confirm("If you click on another sensor the current sensor config will close. Are you sure you want to do that?")) {
                                             count = 0;
@@ -387,7 +382,6 @@
                 });
 
                 function updateYaw(idSensor) {
-                    console.log('ola');
                     const mysql = require('mysql');
                     const connection = mysql.createConnection({
                         host: '127.0.0.1',
@@ -835,7 +829,6 @@
                                 imgSensor.src = 'data:image/png;base64,' + result[0].term_base + '';
                                 break;
                             default:
-                                console.log("Imagem não acessivel");
                                 imgSensor.src = 'imagens/na.png';
                         }
                     });
@@ -883,7 +876,10 @@
             </script>
         </div>
         <!--Time line-->
-        <label class="text-center"> Time-line </label>
+        <label class="text-center"> Time-line </label><br>
+        <button id="conf_timeline" class="btn
+                btn-outline-danger" onclick="configTimeline()">Configure
+                timeline</button>
         <br>
 
         <div id="slider-timestamp"></div>
