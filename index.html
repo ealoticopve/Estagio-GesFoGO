@@ -1037,7 +1037,10 @@
                 </div>
                 </div>
                 </div>
-                `; 
+                `;
+                div.ondblclick = (e) => {
+                    e.stopPropagation();
+                };
                 return div;
             };
             command.addTo(mymap); //your map variable
