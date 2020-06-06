@@ -71,8 +71,8 @@
                 <h5> Draw Tools</h5>
                 <select id='mode' class="btn-danger custom-select">
                         <option value="nothing"></option>
-                        <option value="draw-fl">Draw Fire lines</option>
-                        <option value="draw-sl">Draw Shadow lines</option>
+                        <option id="drawfl" value="draw-fl">Draw Fire lines</option>
+                        <option id="drawsl" value="draw-sl">Draw Shadow lines</option>
                         <option value="delete">Delete lines</option>
                     </select>
 
@@ -370,11 +370,9 @@
 
                 //sensorGroup = L.layerGroup(sensores).addTo(mymap);
                 var layerGroups = {
-                    "Sensors": sensorGroup,
-                    "Fire lines": fireLinesGroup
+                    "Sensors": sensorGroup
                 }
                 var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
-
                 mymap.on('overlayadd', function() {
                     sensorGroup.eachLayer(function(layer) {
                         layer.setDraggable(false)
@@ -976,10 +974,10 @@
             <img id="imgIV" width="100%" height="100%" />
 
         </div>
-        <label for="">Fire Lines</label>
+        <!--<label for="">Fire Lines</label>
         <input type="checkbox" id="inputFireLine" onclick="hideFireLines()" name="Fire Lines" checked>
         <label for="">Shadow Lines</label>
-        <input type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>
+        <input type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>-->
         <!--*********************
         **metodo de full Screen**
         **********************-->
@@ -1020,6 +1018,29 @@
             }
         </script>
         <script>
+            var command = L.control({position: 'topleft'});
+            command.onAdd = function (mymap) {
+                var div = L.DomUtil.create('div');
+                div.innerHTML = `
+                <div class="dropdown text-center">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Hide Layers
+                </button>
+                <div class="dropdown-menu btn btn-info text-center">
+                <div class="dropdown-item btn btn-info text-center">
+                    <label>Fire Lines</label>
+                    <input class="dropdown-item" type="checkbox" id="inputFireLine" onclick="hideFireLines()" name="Fire Lines" checked>
+                </div>
+                <div class="dropdown-item btn btn-info text-center">
+                    <label>Shadow Lines</label>
+                    <input class="dropdown-item" type="checkbox" id="inputShadowLine" onclick="hideShadowLines()" name="Shadow Lines" checked>
+                </div>
+                </div>
+                </div>
+                `; 
+                return div;
+            };
+            command.addTo(mymap); //your map variable
             function hideFireLines(){
                 var checkbox = document.getElementById('inputFireLine');
                 var x = document.getElementsByClassName("fireLine");
@@ -1028,11 +1049,15 @@
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "none";
                     }
+                    fireLines.setMode('view');
+                    document.getElementById("drawfl").disabled = true;
                 }else{
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "block";
                     }
+                    document.getElementById("drawfl").disabled = false;
                 }
+                
             }
             function hideShadowLines(){
                 var checkbox = document.getElementById('inputShadowLine');
@@ -1042,10 +1067,13 @@
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "none";
                     }
+                    shadowLines.setMode('view');
+                    document.getElementById("drawsl").disabled = true;
                 }else{
                     for (i = 0; i < x.length; i++) {
                         x[i].style.display = "block";
                     }
+                    document.getElementById("drawsl").disabled = false;
                 }
             }
         </script>
