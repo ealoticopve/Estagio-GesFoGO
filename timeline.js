@@ -68,7 +68,7 @@ function showTimeLinePolygons() {
             console.log(err);
         } else {
             for (i in result) {
-                var resWithoutPolygon = result[i].coords.split("POLYGON((");
+                /*var resWithoutPolygon = result[i].coords.split("POLYGON((");
                 var resWithoutPolygon2 = resWithoutPolygon[1].split("))");
                 var res = resWithoutPolygon2[0].split(",");
                 for (j in res) {
@@ -79,7 +79,7 @@ function showTimeLinePolygons() {
                 var polygon = L.polygon(LatLng, { className: 'fireLine', color: 'red', fillColor: 'red', fillOpacity: 0.6, opacity: 1, time: result[i].date}, {alwaysShowDate: true })
                 layersGeoJSON.addLayer(polygon);
                 LatLng = [];
-                polygon.id = result[i].date;
+                polygon.id = result[i].date;*/
             }
         }
     });
