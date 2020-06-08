@@ -425,14 +425,14 @@ function configMenu() {
             for (var i = 0, row; row = table.rows[i]; i++) {
                 for (var j = 0, col; col = row.cells[j]; j++) {
                     table.innerHTML =
-                        '<tr><th> Comandos: </th><td id ="aham"> ' +
+                        '<tr><th> Comandos: </th><td class="text-center" id ="aham"> ' +
                         '<select class="btn-success custom-select" id="commands">' +
                         '<option name="option" value="nada">None</option>' +
                         '<option name="option" value="amin">Change pitch min</option>' +
                         '<option name="option" value="amax">Change pitch max</option>' +
                         '<option name="option" value="cf">Change capture frequency</option>' +
                         '</select>' +
-                        '<input id="Box" value="" type="text" disabled >' +
+                        '<input class="text-center" id="Box" value="" type="text" disabled >' +
                         '<form>' +
                         '<th><br><input type = "submit" class="btn-success" value = "Confirm values" onclick = "updates();"></th>' +
                         '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
