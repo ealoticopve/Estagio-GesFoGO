@@ -1,8 +1,8 @@
 var datas = [];
 var datasDB = [];
 var dataInicial = new Date("05-29-20 12:25:00");
-var dataFinal = new Date("05-29-20 13:10:00");
-var step = 10 * 60000;
+var dataFinal = new Date("05-29-20 13:00:00");
+var step = 25 * 60000;
 var dataInicialIntervalo = dataInicial.getTime();
 var dataFinalIntervalo = dataInicialIntervalo + step;
 var dataInicial = dataInicial.getFullYear() + "-" + (dataInicial.getMonth() + 1) + "-" + dataInicial.getDate() + " " + dataInicial.getHours() + ":" + dataInicial.getMinutes() + ":" + dataInicial.getSeconds();

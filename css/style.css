@@ -1,3 +1,58 @@
+body {
+    margin-top: 1px;
+    margin-left: 4px;
+    margin-right: 0px;
+}
+
+table {
+    width: 98%;
+    height: 100%;
+    margin: auto;
+}
+
+.container {
+    max-width: 100% !important;
+    position: relative;
+}
+
+.left {
+    width: 60%;
+    height: 700px;
+    border: 1px #000 solid;
+    background-color: #f8f9fa;
+}
+
+.right {
+    height: 100%;
+}
+
+.right .top {
+    height: 50.45%;
+    width: 100%;
+    vertical-align: top;
+    border: 1px #000 solid;
+    background-color: #f8f9fa;
+}
+.right .bottom {
+    height: 50.45%;
+    width: 100%;
+    margin-top: 3px;
+    vertical-align: bottom;
+    border: 1px #000 solid;
+    background-color: #f8f9fa;
+}
+
+.imageFromVisor{
+    margin: 1% !important;
+}
+
+.titulo{
+    position: absolute;
+    top: 35px;
+    left: 15px;
+    width: 20%;
+}
+
 .dropdown {list-style: none; background: #17a2b8; border-radius: 9px;}
 .dropdown .nav-link {color:#fff; text-decoration: none;}
 .dropdown .dropdown-menu a{color: #fff; text-decoration: none;}
@@ -10,7 +65,6 @@
 .container .dropdown .dropdown-menu a:hover
 {
   color: #fff;
-  border-color: #fff;
 }
 
 #team {
@@ -26,46 +80,23 @@ path.leaflet-line {
 
 div.imageVisor {
     background-color: #f8f9fa;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
-    Height: 50%;
-    Width: 50%;
-    overflow: scroll;
-    padding: 10px;
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
+    padding: 2px;
+    height: 100%;
 }
 
 p {
     font-size: 20px;
 }
 
-div.nodeVisor {
-    background-color: #f8f9fa;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
-    Height: 50%;
-    Width: 50%;
-    overflow: auto;
-    padding: 10px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-}
-
 div.mainVisor {
     background-color: #f8f9fa;
-    border: 1px;
-    Height: 500px;
-    Width: 50%;
-    padding: 10px;
-    position: relative;
-    top: 0px;
-    left: 0px;
-    overflow: auto;
+    Height: 100%;
+    Width: 100%;
+}
+
+div.divTimeLine {
+    background-color: #f8f9fa;
+    position: inline-block;
 }
 
 div.at {
@@ -90,17 +121,14 @@ a {
 
 #map {
     position: relative;
-    Height: 89%;
+    Height: 715px;
     Width: 100%;
     top: 40px;
 }
 
 #fullscream {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    margin-top: 3px;
-    margin-right: 10px;
+    right: 9px;
 }
 
 #mode {
@@ -120,23 +148,28 @@ h5 {
 }
 
 #commands {
-    position: absolute;
-    height: 20px;
-    top: 25%;
+    position: relative;
+    top: -1px;
 }
 
 #Box {
-    position: absolute;
-    top: 25%;
-    right: 0px;
-    margin-right: 5px;
+    position: relative;
+    top: 2px;
+    right: -19px;
 }
 
-table,
-th,
-td {
+.nodeVisorTable table,
+.nodeVisorTable th,
+.nodeVisorTable td{
     border: 1px solid black;
     border-collapse: collapse;
+}
+
+tbody {
+    margin: 0px !important;
+    padding: 0px !important;
+    width: 100%;
+    height: 100%;
 }
 
 th {
