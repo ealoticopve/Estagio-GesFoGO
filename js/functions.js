@@ -659,9 +659,7 @@ function showInfoNV(id) {
 
         //time out to get the doc ready
         setTimeout(function() {
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                for (var j = 0, col; col = row.cells[j]; j++) {
-                    table.innerHTML =
+            table.innerHTML =
                         '<form><tr><th> Sensor: </th><td id="s-i">' + idSensor + '</td></tr>' +
                         '<tr><th> Latitude: </th><td>' + latitude + '</td></tr>' +
                         '<tr><th> Longitude: </th><td>' + longitude + '</td></tr>' +
@@ -670,8 +668,6 @@ function showInfoNV(id) {
                         '<tr><th> Team: </th> <td><input id="team" type="text" value="' + response_team + '">' + time_stamp + '<br><input type = "submit" class="btn-success" value = "Update Team"onclick = "updateTeam();"></td>' +
                         '<input type="hidden" id="SI" value="' + idSensor + '">' +
                         '</form>';
-                }
-            }
             changeImg(idSensor, 'buttVis');
         }, 200);
     });

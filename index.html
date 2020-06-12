@@ -56,8 +56,27 @@
                         <input type="hidden" id="btn_hidden_yaw_long" value="">';
                         <!--Time line-->
                         <br><br><br>
-                        <div class="divTimeLine text-center">
-                            <button id="conf_timeline" class="btn btn-success">Configure timeline</button>
+                        <div class="divTimeLine">
+                            <form>
+                                <div class="form-row">
+                                  <div class="col-3 text-center">
+                                    <label for="timeline-init">Timeline init</label>
+                                    <input type='datetime-local' id='timeline-init' class="form-control text-center" placeholder="Timeline init">
+                                  </div>
+                                  <div class="col-3 text-center">
+                                    <label for="timeline-end">Timeline end</label>
+                                    <input type='datetime-local' id='timeline-end' class="form-control text-center" placeholder="Timeline end">
+                                  </div>
+                                  <div class="col-3 text-center">
+                                    <label for="step">Step</label>
+                                    <input type='number' class="form-control text-center" id='step' min='5' max='1440' placeholder="Max = 1440 (1 day)">
+                                  </div>
+                                  <div class="col-3 text-center">
+                                    <label for="step" type="hidden">Confirm </label>
+                                    <button class="btn btn-success form-control text-center" id="confirmTimeline">Confirm Interval</button>
+                                  </div>
+                                </div>
+                              </form>
                         </div>
                         
                     </div>
@@ -78,11 +97,7 @@
                             
                             <br><br><br><br><br><br>
                             <div class="text-center">
-                                <table class="nodeVisorTable" id="nv_table" value="valor da tabela">
-                                    <tr style="display: none">
-                                        <th style="display: none"></th>
-                                    </tr>
-                                </table>
+                                <table class="nodeVisorTable" id="nv_table" value="valor da tabela"></table>
                             </div>
                             
                             <br>
@@ -116,18 +131,7 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <form>
-                    <label>Timeline init:</label>
-                    <br><input type='datetime-local' id='timeline-init'><br><br>
-                    <label>Timeline end:</label><br>
-                    <input type='datetime-local' id='timeline-end'><br><br>
-                    <label>Step:</label><br>
-                    <input type='number' id='step' min='5' max='1440'>
-                    <label>minutes</label><br>
-                    <label>(max value: 1440 - 1 day)</label>
-                    <input id="confirmTimeline" type='submit' value="Confirm
-                            values"><br><br>
-                </form>
+                
             </div>
         </div>
 
