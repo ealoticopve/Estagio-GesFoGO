@@ -260,7 +260,7 @@ function getInstances() {
                 cam.on('click', function(id) {
                     id = this.options.id; // sensor id clicked
                     var idS = document.getElementById("SI").value = id; //send a hidden value with the id : SI-> Sensor ID
-                    showInfoNV(idS); //call function to show info in NV
+                    showSensorInfo(); //call function to show info in NV
                 })
 
                 sensorGroup.addLayer(cam).addTo(mymap);
@@ -335,66 +335,7 @@ function updateYaw(idSensor) {
     });
 }
 
-
-
-function showSpecifSensorNV() {
-    //show sensor static info from DB in NV
-    if (document.getElementById("SI").value === "") { //cheking if we clicked a sensor 
-        alert("Please, click on the sensor to show its configurations.")
-        return;
-    }
-
-    var idSensor = document.getElementById("SI").value;
-    const mysql = require('mysql');
-    const connection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: 'root',
-        password: '',
-        database: 'nodevisor'
-    });
-    //start connection
-    connection.connect((err) => {
-        if (err) {
-            return console.log(err.stack);
-        }
-        console.log("successful connection");
-    });
-
-    //query for capture all specifc tech info from sensor
-    $query = "SELECT * FROM techspecifications WHERE sensor_id ='" + idSensor + "'";
-    connection.query($query, function(err, result, fields) {
-        if (err) {
-            console.log("Query Error");
-        }
-        var table = document.getElementById("nv_table");
-
-        //time out to get the doc ready
-        //displaying sensor technical info 
-        setTimeout(function() {
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                for (var j = 0, col; col = row.cells[j]; j++) {
-                    table.innerHTML =
-                        '<tr><th> Sensor: </th><td>' + result[0].sensor_id + '</td></tr>' +
-                        '<tr><th> Serial number: </th><td>' + result[0].serial_number + '</td></tr>' +
-                        '<tr><th> Actual Communication Service: </th><td>' + result[0].communication + '</td></tr>' +
-                        '<tr><th> Alarm type: </th><td>' + result[0].alarm_id + '</td></tr>' +
-                        '<tr><th> Maximun len lenght: </th><td>' + result[0].camera_len_lenght + '</td></tr>' +
-                        '<tr><th> Battery Capacity: </th><td>' + result[0].battery_capacity + '</td></tr>' +
-                        '<th><button id="config" class="btn-success" onclick="configMenu();"> Configurate Sensor </button></th>' +
-                        '<input type="hidden" id="SI" value="' + result[0].sensor_id + '">';
-                }
-            }
-        }, 200);
-    });
-    //fechar conexao
-    connection.end(() => {
-        console.log("Connection closed with sucess.");
-    });
-
-}
-
-function configMenu() {
-    //show info from DB in NV
+function showConfigMenu(){
     var idSensor = document.getElementById("SI").value;
     const mysql = require('mysql');
     const connection = mysql.createConnection({
@@ -411,67 +352,66 @@ function configMenu() {
         console.log("Sucessfuly connection");
     });
 
+    var table_2 = document.getElementById("nv_table_2");
+
     //query for capture all posible commands/commands
-    $query = "SELECT * FROM commands,sensor WHERE sensor_id ='" + idSensor + "'";
+    $query = "SELECT * FROM commands, sensor WHERE sensor_id ='" + idSensor + "'";
     connection.query($query, function(err, result, fields) {
         if (err) {
             console.log("Query Error");
-        }
-
-        var table = document.getElementById("nv_table");
-        var idSensor = result[0].sensor_id;
-        //time out to get the doc ready
-        setTimeout(function() {
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                for (var j = 0, col; col = row.cells[j]; j++) {
-                    table.innerHTML =
-                        '<tr><th> Comandos: </th><td class="text-center" id ="aham"> ' +
-                        '<select class="btn-success custom-select" id="commands">' +
-                        '<option name="option" value="nada">None</option>' +
-                        '<option name="option" value="amin">Change pitch min</option>' +
-                        '<option name="option" value="amax">Change pitch max</option>' +
-                        '<option name="option" value="cf">Change capture frequency</option>' +
-                        '</select>' +
-                        '<input class="text-center" id="Box" value="" type="text" disabled >' +
-                        '<form>' +
-                        '<th><br><input type = "submit" class="btn-success" value = "Confirm values" onclick = "updates();"></th>' +
-                        '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
-                        '</form>';
-
-                }
-            }
-
+        }else{
             setTimeout(function() {
-                document.getElementById("commands").onchange = function() {
-                    var box = document.getElementById("Box");
+            table_2.innerHTML =
+                '<form class="form-inline">' +
+                '<tr><th> Commands: </th><td class="text-center" id ="aham"> ' +
+                '<select class="btn-success custom-select w-25 ml-3 mr-3" id="commands">' +
+                '<option name="option" value="nada">None</option>' +
+                '<option name="option" value="amin">Change pitch min</option>' +
+                '<option name="option" value="amax">Change pitch max</option>' +
+                '<option name="option" value="cf">Change capture frequency</option>' +
+                '</select>' +
+                '<input class="text-center ml-3 mr-3" id="Box" value="" type="text" disabled >' +
+                '<input type = "submit" class="btn-success ml-3 mr-3" value = "Confirm values" onclick = "updates();">' +
+                '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
+                '</form>';
 
-                    box.setAttribute("disabled", "disabled");
-                    switch (this.value) {
-
-                        case 'amin':
-                            box.style.visibility = "visible";
-                            box.removeAttribute("disabled");
-                            box.value = result[0].pitch_min;
-                            break;
-                        case 'amax':
-                            box.style.visibility = "visible";
-                            box.removeAttribute("disabled");
-                            box.value = result[0].pitch_max;
-                            break;
-                        case 'cf':
-                            box.style.visibility = "visible";
-                            box.removeAttribute("disabled");
-                            box.value = result[0].capt_freq
-                            break;
-                        default:
-                            box.style.visibility = "visible";
-                            box.value = ''
-                            break;
-                    }
-                };
+                setTimeout(function() {
+                    document.getElementById("commands").onchange = function() {
+                        var box = document.getElementById("Box");
+                        
+                        box.setAttribute("disabled", "disabled");
+                        switch (this.value) {
+    
+                            case 'amin':
+                                box.style.visibility = "visible";
+                                box.removeAttribute("disabled");
+                                box.value = result[0].pitch_min;
+                                box.type = 'text';
+                                break;
+                            case 'amax':
+                                box.style.visibility = "visible";
+                                box.removeAttribute("disabled");
+                                box.value = result[0].pitch_max;
+                                box.type = 'text';
+                                break;
+                            case 'cf':
+                                box.style.visibility = "visible";
+                                box.removeAttribute("disabled");
+                                box.value = result[0].capt_freq
+                                box.type = 'time';
+                                box.step = 1;
+                                break;
+                            default:
+                                box.style.visibility = "visible";
+                                box.value = ''
+                                break;
+                        }
+                    };
+                }, 200);
             }, 200);
-        }, 200);
+        }
     });
+
     //fechar conexao
     connection.end(() => {
         console.log("Connection closed with sucess.");
@@ -520,8 +460,10 @@ function updatePitchMin(idSen) {
     connection.query($query, function(err, result, fields) {
         if (err) {
             alert("Query Error.");
+        }else{
+            alert("Min Pitch changed Sucessfuly.");
+            location.reload();
         }
-        location.reload();
     });
     //fechar conexao
     connection.end(() => {
@@ -552,8 +494,10 @@ function updatePitchMax(idSen) {
     connection.query($query, function(err, result, fields) {
         if (err) {
             console.log("Query Error.");
+        }else{
+            alert("Max Pitch changed Sucessfuly.");
+            location.reload();
         }
-        location.reload();
     });
     //fechar conexao
     connection.end(() => {
@@ -568,7 +512,7 @@ function updateCaptFreq(idSen) {
         host: '127.0.0.1',
         user: 'root',
         password: '',
-        database: 'nodevisordb'
+        database: 'nodevisor'
     });
 
     //iniciar conexao
@@ -579,19 +523,18 @@ function updateCaptFreq(idSen) {
         console.log("Sucessfuly connection");
     });
 
-
     var capture_frequency = document.getElementById('Box').value;
-    if (capture_frequency >= 60) {
-        capture_frequency = 59;
-    }
 
-    $query = 'UPDATE property SET value= "' + capture_frequency + '" WHERE propertytype_id = "50" and entity_id = "' + idSen + '"';
+
+    $query = 'UPDATE sensor SET capt_freq= "' + capture_frequency + '" WHERE sensor.id = ' + idSen;
+    console.log($query);
     connection.query($query, function(err, result, fields) {
         if (err) {
             console.log("Query Error.");
+        }else{
+            alert("Capture Frequency changed Sucessfuly.");
+            location.reload();
         }
-        alert("Capture Frequency changed Sucessfuly.");
-        location.reload();
     });
     //fechar conexao
     connection.end(() => {
@@ -599,21 +542,14 @@ function updateCaptFreq(idSen) {
     });
 };
 
-function showInfoNV(id) {
-    //show info from DB in NV
-
-    if (document.getElementById("SI").value === "") {
-        alert("Please, click on the sensor to show its state.")
-        return;
-    }
-
+function showSensorInfo(){
     var idSensor = document.getElementById("SI").value;
     const mysql = require('mysql');
     const connection = mysql.createConnection({
         host: '127.0.0.1',
         user: 'root',
         password: '',
-        database: 'nodevisordb'
+        database: 'nodevisor'
     });
     //start connection
     connection.connect((err) => {
@@ -623,54 +559,40 @@ function showInfoNV(id) {
         console.log("Sucessfuly connection");
     });
 
+    let table_1 = document.getElementById("nv_table_1");
+
     //query for capture all properties values of instanced sensors
-    $query = "SELECT entitytype.entitytype_name, entity.id, entity.entity_name, propertytype.propertytype_name, property.value FROM entitytype,propertytype, entity, property WHERE entitytype.entitytype_name ='sensor' AND entity.entitytype_id = entitytype.id and propertytype.entitytype_id = entitytype.id and property.entity_id = entity.id and property.propertytype_id = propertytype.id and entity.id = '" + idSensor + "'";
+    $query = "SELECT sensor.id as 'idSensor', longitude, latitude, capt_freq, DATE_FORMAT(time_stamp, '%d-%m-%Y %H:%i:%s') as 'time_stamp', bateria as 'battery', equipa as 'response_team', serial_number, communication, alarm_id, camera_len_lenght, battery_capacity from sensor, techspecifications where sensor.id = techspecifications.sensor_id and sensor.id = " + idSensor;
+    console.log($query);
     connection.query($query, function(err, result, fields) {
         if (err) {
-            console.log("Query Error");
+            console.log("Query Error" + err);
+        }else{
+            setTimeout(function() {
+                table_1.innerHTML = 
+                '<form><tr><th> Sensor: </th><td id="s-i">' + result[0].idSensor + '</td></tr>' +
+                '<tr><th> Latitude: </th><td>' + result[0].latitude + '</td></tr>' +
+                '<tr><th> Longitude: </th><td>' + result[0].longitude + '</td></tr>' +
+                '<tr><th> Capture Frequency: </th><td id="cf">' + result[0].capt_freq + '</td></tr>' +
+                '<tr><th> Bateria: </th><td>' + result[0].battery + '</td></tr>' +
+                '<tr><th> Team: </th> <td><input id="team" class="w-25" type="text" value="' + result[0].response_team + '">' + result[0].time_stamp + '<input type = "submit" class="btn-success ml-2" value = "Update Team" onclick = "updateTeam();"></td>' +
+                '<tr><th> Serial Number: </th><td id="s-i">' + result[0].serial_number + '</td></tr>' +
+                '<tr><th> Actual Communication Service: </th><td id="s-i">' + result[0].communication + '</td></tr>' +
+                '<tr><th> Alarm type: </th><td id="s-i">' + result[0].alarm_id + '</td></tr>' +
+                '<tr><th> Max len lenght: </th><td id="s-i">' + result[0].camera_len_lenght + '</td></tr>' +
+                '<tr><th> Battery Capacity: </th><td id="s-i">' + result[0].battery_capacity + '</td></tr>' +
+                '<input type="hidden" id="SI" value="' + idSensor + '"></form>';
+                changeImg(idSensor, 'buttVis');
+            }, 200);
         }
-        // capture particular sensor properties 
-        for (i in result) {
-
-            switch (result[i].propertytype_name) {
-                case 'longitude':
-                    var longitude = result[i].value;
-                    break;
-                case 'latitude':
-                    var latitude = result[i].value;
-                    break;
-                case 'capt_freq':
-                    var capt_freq = result[i].value;
-                    break;
-                case 'battery':
-                    var battery = result[i].value;
-                    break;
-                case 'response_team':
-                    var response_team = result[i].value;
-                    break;
-                case 'time_stamp':
-                    var time_stamp = result[i].value;
-                    break;
-                default:
-                    break;
-            }
-        }
-        var table = document.getElementById("nv_table");
-
-        //time out to get the doc ready
-        setTimeout(function() {
-            table.innerHTML =
-                        '<form><tr><th> Sensor: </th><td id="s-i">' + idSensor + '</td></tr>' +
-                        '<tr><th> Latitude: </th><td>' + latitude + '</td></tr>' +
-                        '<tr><th> Longitude: </th><td>' + longitude + '</td></tr>' +
-                        '<tr><th> Capture Frequency: </th><td id="cf">' + capt_freq + '</td></tr>' +
-                        '<tr><th> Bateria: </th><td>' + battery + '</td></tr>' +
-                        '<tr><th> Team: </th> <td><input id="team" type="text" value="' + response_team + '">' + time_stamp + '<br><input type = "submit" class="btn-success" value = "Update Team"onclick = "updateTeam();"></td>' +
-                        '<input type="hidden" id="SI" value="' + idSensor + '">' +
-                        '</form>';
-            changeImg(idSensor, 'buttVis');
-        }, 200);
+        
     });
+
+    connection.end(() => {
+        console.log("Connection closed with sucess.");
+    });
+
+    showConfigMenu();
 }
 
 function changeImg(id, type) {
@@ -739,7 +661,7 @@ function changeImg(id, type) {
                 imgSensor.src = 'imagens/na.png';
         }
         imgSensor.setAttribute('width', '98%');
-        imgSensor.setAttribute('height', '273px');
+        imgSensor.setAttribute('height', '242px');
     });
     //fechar conexao
     connection.end(() => {
@@ -757,7 +679,7 @@ function updateTeam() {
         host: '127.0.0.1',
         user: 'root',
         password: '',
-        database: 'nodevisordb'
+        database: 'nodevisor'
     });
 
     //iniciar conexao
@@ -768,14 +690,15 @@ function updateTeam() {
         console.log("Sucessfuly connection");
     });
 
-    $query = 'UPDATE property SET value= "' + newTeam + '" WHERE propertytype_id = "67" and entity_id = "' + idSensor + '"';
+    $query = 'UPDATE sensor SET equipa = "' + newTeam + '" WHERE sensor.id = ' + idSensor;
+    console.log($query);
     connection.query($query, function(err, result, fields) {
         if (err) {
-            alert("Query Error.");
+            alert("Query Error." + err);
+        }else{
+            alert("Team changed with sucess.");
+            location.reload();
         }
-        alert("Team changed with sucess.");
-        location.reload();
-
     });
     //fechar conexao
     connection.end(() => {
@@ -869,7 +792,7 @@ function FullscreenIV() {
             document.msExitFullscreen();
         }
         imgSensor.setAttribute('width', '98%');
-        imgSensor.setAttribute('height', '273px');
+        imgSensor.setAttribute('height', '242px');
     }
     
 }

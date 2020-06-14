@@ -20,7 +20,7 @@ table {
 }
 
 .left {
-    width: 60%;
+    width: 55%;
     height: 700px;
     border: 1px #000 solid;
     background-color: #f8f9fa;
@@ -28,34 +28,36 @@ table {
 }
 
 .right {
-    height: 100%;
+    height: 98%;
+    max-width: 1100px;
+    max-height: 700px;
+    min-width: 400px;
+    min-height: 700px;
 }
 
 .right .top {
-    height: 50.45%;
+    height: 60.45%;
     width: 100%;
     vertical-align: top;
     border: 1px #000 solid;
     background-color: #f8f9fa;
-    resize: both;
-    overflow: auto;
-    max-width: 700px;
-    max-height: 700px;
     position: relative;
+    resize: horizontal;
+    overflow: hidden;
+    min-width: 380px;
 }
 
 .right .bottom {
-    height: 50.45%;
+    height: 40.45%;
     width: 100%;
     margin-top: 3px;
     vertical-align: bottom;
     border: 1px #000 solid;
     background-color: #f8f9fa;
-    resize: both;
-    overflow: auto;
-    max-width: 700px;
-    max-height: 700px;
     position: relative;
+    resize: horizontal;
+    overflow: hidden;
+    min-width: 380px;
 }
 
 .imageFromVisor {
