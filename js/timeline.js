@@ -13,12 +13,10 @@ function displayGeoDataTimeLine() {
             var SensorID = document.getElementById("SI").value;
             if (SensorID != "") {
                 console.log("muda foto");
-                document.getElementById("conf_timeline").style.display = "block";
                 showTimeLineImg(SensorID, e.markers[0].options.time);
             }
         });
     }, 1000)
-
 }
 
 displayGeoDataTimeLine();
@@ -61,7 +59,7 @@ function showTimeLinePolygons() {
         password: '',
         database: 'nodevisor'
     });
-    query = "SELECT DATE_FORMAT(timeline_info.date, '%Y-%m-%d %H:%i:%s') as 'date', AsText(timeline_info.firelines_coords) as 'coords' FROM timeline_info";
+    query = "SELECT DATE_FORMAT(timeline_info.date, '%Y-%m-%d %H:%i:%s') as 'date', AsText(timeline_info.coordinates) as 'coords' FROM timeline_info";
     connection.query(query, function(err, result) {
         if (err) {
             console.log(err);
@@ -75,7 +73,11 @@ function showTimeLinePolygons() {
                     Coordenadas = [coordenadas[1], coordenadas[0]]
                     LatLng.push(Coordenadas);
                 }
-                var polygon = L.polygon(LatLng, { className: 'fireLine', color: 'red', fillColor: 'red', fillOpacity: 0.6, opacity: 1, time: result[i].date}, {alwaysShowDate: true })
+                var polygon = L.polygon(LatLng, { className: 'fireLine', color: 'red', fillColor: 'red', fillOpacity: 0.6, opacity: 1, time: result[i].date }, { alwaysShowDate: true })
+                fireLinesGroup.addLayer(fireLines).addTo(mymap);
+                fireLines.addPolygon([
+                    LatLng
+                ], true, true, false);
                 layersGeoJSON.addLayer(polygon);
                 LatLng = [];
                 polygon.id = result[i].date;
@@ -118,25 +120,6 @@ document.getElementById("confirmTimeline").addEventListener("click", function up
         }
     }
 });
-
-var btn = document.getElementById("conf_timeline");
-var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
-
-
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
 /*******************
 * INSERT Polygons DB

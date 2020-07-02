@@ -11,7 +11,7 @@ var mymap = L.map('map', {
     fullscreenControl: true,
 });
 
-mymap.on('click', function(e) {
+mymap.on('click', function (e) {
     console.log("[" + e.latlng.lat + ", " + e.latlng.lng + "]")
 });
 
@@ -63,9 +63,9 @@ var shadowLines = new L.FreeHandShapes({
     merge_polygons: true,
     concave_polygons: false
 });
-
+console.log(fireLines)
 //change draw mode
-document.getElementById('mode').onchange = function() {
+document.getElementById('mode').onchange = function () {
     //freeDraw allows us to create and edit
     switch (this.value) {
         case 'nothing':
@@ -76,7 +76,8 @@ document.getElementById('mode').onchange = function() {
             shadowLines.setMode('view');
             fireLines.setMode('add');
             fireLinesGroup.addLayer(fireLines).addTo(mymap);
-            fireLines.on('layeradd', function(data) {
+            console.log(fireLines)
+            fireLines.on('layeradd', function (data) {
                 var checkbox = document.getElementById('inputFireLine');
                 checkbox.checked = true;
                 hideFireLines();
@@ -87,7 +88,7 @@ document.getElementById('mode').onchange = function() {
             fireLines.setMode('view');
             shadowLines.setMode('add');
             shadowLinesGroup.addLayer(shadowLines).addTo(mymap);
-            shadowLines.on('layeradd', function(data) {
+            shadowLines.on('layeradd', function (data) {
                 var checkbox = document.getElementById('inputShadowLine');
                 checkbox.checked = true;
                 hideShadowLines();
@@ -102,6 +103,7 @@ document.getElementById('mode').onchange = function() {
             break;
     }
 };
+
 
 
 //get all sensors from DB and visualize them in mymap
@@ -125,7 +127,7 @@ function getInstances() {
 
     //query for capture all properties values of instanced sensors
     query = "SELECT sensor.id, sensor.longitude, sensor.latitude, commands.yaw_lat, commands.yaw_long, commands.angle FROM sensor,commands WHERE commands.sensor_id = sensor.id"
-    connection.query(query, function(err, result, fields) {
+    connection.query(query, function (err, result, fields) {
         if (err) {
             console.log("Query Error");
         }
@@ -204,7 +206,7 @@ function getInstances() {
 
                 cam.addTo(mymap);
 
-                cam.on('change', function(event) {
+                cam.on('change', function (event) {
                     document.getElementById("btn_hidden_angle").value = this.getFieldOfView().properties.angle;
                     document.getElementById("btn_hidden_yaw_lat").value = this.getTargetLatLng().lat;
                     document.getElementById("btn_hidden_yaw_long").value = this.getTargetLatLng().lng;
@@ -218,7 +220,7 @@ function getInstances() {
                 var openedSensorFieldOfView;
                 var idOpenedSensor;
 
-                cam.on('dblclick', function(event) {
+                cam.on('dblclick', function (event) {
                     if (count == 0) {
                         count++;
                         openedSensor = this;
@@ -237,7 +239,7 @@ function getInstances() {
                         });
                         openedWindow = win;
                         win.prompt({
-                            callback: function() {
+                            callback: function () {
                                 updateYaw(idOpenedSensor);
                                 count = 0;
                             },
@@ -257,7 +259,7 @@ function getInstances() {
                 });
 
                 //show information in nodeVisor when we click the sensor
-                cam.on('click', function(id) {
+                cam.on('click', function (id) {
                     id = this.options.id; // sensor id clicked
                     var idS = document.getElementById("SI").value = id; //send a hidden value with the id : SI-> Sensor ID
                     showSensorInfo(); //call function to show info in NV
@@ -269,7 +271,7 @@ function getInstances() {
                 long = undefined; //reseting long from new call to db  
             }
         }
-        sensorGroup.eachLayer(function(layer) {
+        sensorGroup.eachLayer(function (layer) {
             layer.setDraggable(false)
         });
     });
@@ -286,8 +288,8 @@ var layerGroups = {
     "Sensors": sensorGroup
 }
 var control = L.control.layers(mapTiles, layerGroups).addTo(mymap);
-mymap.on('overlayadd', function() {
-    sensorGroup.eachLayer(function(layer) {
+mymap.on('overlayadd', function () {
+    sensorGroup.eachLayer(function (layer) {
         layer.setDraggable(false)
     });
 });
@@ -316,14 +318,14 @@ function updateYaw(idSensor) {
     //query for capture all specifc tech info from sensor
     $query = "UPDATE commands SET yaw_lat='" + btn_hidden_yaw_lat + "', yaw_long ='" + btn_hidden_yaw_long + "', angle ='" + btn_hidden_angle + "' WHERE sensor_id=" + id;
     //$query = "select * from sensor"
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error");
         }
     })
 
     //close button
-    sensorGroup.eachLayer(function(layer) {
+    sensorGroup.eachLayer(function (layer) {
         if (layer.options.id == id) {
             layer.setDraggable(false)
         } else {
@@ -335,7 +337,7 @@ function updateYaw(idSensor) {
     });
 }
 
-function showConfigMenu(){
+function showConfigMenu() {
     var idSensor = document.getElementById("SI").value;
     const mysql = require('mysql');
     const connection = mysql.createConnection({
@@ -356,32 +358,32 @@ function showConfigMenu(){
 
     //query for capture all posible commands/commands
     $query = "SELECT * FROM commands, sensor WHERE sensor_id ='" + idSensor + "'";
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error");
-        }else{
-            setTimeout(function() {
-            table_2.innerHTML =
-                '<form class="form-inline">' +
-                '<tr><th> Commands: </th><td class="text-center" id ="aham"> ' +
-                '<select class="btn-success custom-select w-25 ml-3 mr-3" id="commands">' +
-                '<option name="option" value="nada">None</option>' +
-                '<option name="option" value="amin">Change pitch min</option>' +
-                '<option name="option" value="amax">Change pitch max</option>' +
-                '<option name="option" value="cf">Change capture frequency</option>' +
-                '</select>' +
-                '<input class="text-center ml-3 mr-3" id="Box" value="" type="text" disabled >' +
-                '<input type = "submit" class="btn-success ml-3 mr-3" value = "Confirm values" onclick = "updates();">' +
-                '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
-                '</form>';
+        } else {
+            setTimeout(function () {
+                table_2.innerHTML =
+                    '<form class="form-inline">' +
+                    '<tr><th> Commands: </th><td class="text-center" id ="aham"> ' +
+                    '<select class="btn-success custom-select w-25 ml-3 mr-3" id="commands">' +
+                    '<option name="option" value="nada">None</option>' +
+                    '<option name="option" value="amin">Change pitch min</option>' +
+                    '<option name="option" value="amax">Change pitch max</option>' +
+                    '<option name="option" value="cf">Change capture frequency</option>' +
+                    '</select>' +
+                    '<input class="text-center ml-3 mr-3" id="Box" value="" type="text" disabled >' +
+                    '<input type = "submit" class="btn-success ml-3 mr-3" value = "Confirm values" onclick = "updates();">' +
+                    '<input type="hidden" id="idSensor" value="' + idSensor + '">' +
+                    '</form>';
 
-                setTimeout(function() {
-                    document.getElementById("commands").onchange = function() {
+                setTimeout(function () {
+                    document.getElementById("commands").onchange = function () {
                         var box = document.getElementById("Box");
-                        
+
                         box.setAttribute("disabled", "disabled");
                         switch (this.value) {
-    
+
                             case 'amin':
                                 box.style.visibility = "visible";
                                 box.removeAttribute("disabled");
@@ -457,10 +459,10 @@ function updatePitchMin(idSen) {
     });
 
     $query = "UPDATE commands SET pitch_min = '" + amin + "' WHERE commands.sensor_id = '" + idSen + "' ";
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             alert("Query Error.");
-        }else{
+        } else {
             alert("Min Pitch changed Sucessfuly.");
             location.reload();
         }
@@ -491,10 +493,10 @@ function updatePitchMax(idSen) {
     });
 
     $query = "UPDATE commands SET pitch_max = '" + amax + "' WHERE commands.sensor_id = '" + idSen + "' ";
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error.");
-        }else{
+        } else {
             alert("Max Pitch changed Sucessfuly.");
             location.reload();
         }
@@ -528,10 +530,10 @@ function updateCaptFreq(idSen) {
 
     $query = 'UPDATE sensor SET capt_freq= "' + capture_frequency + '" WHERE sensor.id = ' + idSen;
     console.log($query);
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error.");
-        }else{
+        } else {
             alert("Capture Frequency changed Sucessfuly.");
             location.reload();
         }
@@ -542,7 +544,7 @@ function updateCaptFreq(idSen) {
     });
 };
 
-function showSensorInfo(){
+function showSensorInfo() {
     var idSensor = document.getElementById("SI").value;
     const mysql = require('mysql');
     const connection = mysql.createConnection({
@@ -564,28 +566,28 @@ function showSensorInfo(){
     //query for capture all properties values of instanced sensors
     $query = "SELECT sensor.id as 'idSensor', longitude, latitude, capt_freq, DATE_FORMAT(time_stamp, '%d-%m-%Y %H:%i:%s') as 'time_stamp', bateria as 'battery', equipa as 'response_team', serial_number, communication, alarm_id, camera_len_lenght, battery_capacity from sensor, techspecifications where sensor.id = techspecifications.sensor_id and sensor.id = " + idSensor;
     console.log($query);
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error" + err);
-        }else{
-            setTimeout(function() {
-                table_1.innerHTML = 
-                '<form><tr><th> Sensor: </th><td id="s-i">' + result[0].idSensor + '</td></tr>' +
-                '<tr><th> Latitude: </th><td>' + result[0].latitude + '</td></tr>' +
-                '<tr><th> Longitude: </th><td>' + result[0].longitude + '</td></tr>' +
-                '<tr><th> Capture Frequency: </th><td id="cf">' + result[0].capt_freq + '</td></tr>' +
-                '<tr><th> Bateria: </th><td>' + result[0].battery + '</td></tr>' +
-                '<tr><th> Team: </th> <td><input id="team" class="w-25" type="text" value="' + result[0].response_team + '">' + result[0].time_stamp + '<input type = "submit" class="btn-success ml-2" value = "Update Team" onclick = "updateTeam();"></td>' +
-                '<tr><th> Serial Number: </th><td id="s-i">' + result[0].serial_number + '</td></tr>' +
-                '<tr><th> Actual Communication Service: </th><td id="s-i">' + result[0].communication + '</td></tr>' +
-                '<tr><th> Alarm type: </th><td id="s-i">' + result[0].alarm_id + '</td></tr>' +
-                '<tr><th> Max len lenght: </th><td id="s-i">' + result[0].camera_len_lenght + '</td></tr>' +
-                '<tr><th> Battery Capacity: </th><td id="s-i">' + result[0].battery_capacity + '</td></tr>' +
-                '<input type="hidden" id="SI" value="' + idSensor + '"></form>';
+        } else {
+            setTimeout(function () {
+                table_1.innerHTML =
+                    '<form><tr><th> Sensor: </th><td id="s-i">' + result[0].idSensor + '</td></tr>' +
+                    '<tr><th> Latitude: </th><td>' + result[0].latitude + '</td></tr>' +
+                    '<tr><th> Longitude: </th><td>' + result[0].longitude + '</td></tr>' +
+                    '<tr><th> Capture Frequency: </th><td id="cf">' + result[0].capt_freq + '</td></tr>' +
+                    '<tr><th> Bateria: </th><td>' + result[0].battery + '</td></tr>' +
+                    '<tr><th> Team: </th> <td><input id="team" class="w-25" type="text" value="' + result[0].response_team + '">' + result[0].time_stamp + '<input type = "submit" class="btn-success ml-2" value = "Update Team" onclick = "updateTeam();"></td>' +
+                    '<tr><th> Serial Number: </th><td id="s-i">' + result[0].serial_number + '</td></tr>' +
+                    '<tr><th> Actual Communication Service: </th><td id="s-i">' + result[0].communication + '</td></tr>' +
+                    '<tr><th> Alarm type: </th><td id="s-i">' + result[0].alarm_id + '</td></tr>' +
+                    '<tr><th> Max len lenght: </th><td id="s-i">' + result[0].camera_len_lenght + '</td></tr>' +
+                    '<tr><th> Battery Capacity: </th><td id="s-i">' + result[0].battery_capacity + '</td></tr>' +
+                    '<input type="hidden" id="SI" value="' + idSensor + '"></form>';
                 changeImg(idSensor, 'buttVis');
             }, 200);
         }
-        
+
     });
 
     connection.end(() => {
@@ -617,7 +619,7 @@ function changeImg(id, type) {
 
     //query returns Base64 encode images from db
     $query = 'SELECT TO_BASE64(visible_img) as vis_base, TO_BASE64(termal_img) as term_base FROM sensor WHERE id =' + id;
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             console.log("Query Error");
         }
@@ -692,10 +694,10 @@ function updateTeam() {
 
     $query = 'UPDATE sensor SET equipa = "' + newTeam + '" WHERE sensor.id = ' + idSensor;
     console.log($query);
-    connection.query($query, function(err, result, fields) {
+    connection.query($query, function (err, result, fields) {
         if (err) {
             alert("Query Error." + err);
-        }else{
+        } else {
             alert("Team changed with sucess.");
             location.reload();
         }
@@ -757,11 +759,11 @@ function FullscreenNV() {
 }
 
 //clicking the button -> call function -> 2 different ways -> same result
-document.getElementById('buttVis').onclick = function() {
+document.getElementById('buttVis').onclick = function () {
     var id = document.getElementById('SI').value;
     changeImg(id, 'buttVis');
 }
-document.getElementById('buttTerm').addEventListener('click', function() {
+document.getElementById('buttTerm').addEventListener('click', function () {
     var id = document.getElementById('SI').value;
     changeImg(id, 'buttTerm');
 }, false);
@@ -794,10 +796,9 @@ function FullscreenIV() {
         imgSensor.setAttribute('width', '98%');
         imgSensor.setAttribute('height', '242px');
     }
-    
 }
 
-var command = L.control({position: 'topleft'});
+var command = L.control({ position: 'topleft' });
 
 command.onAdd = function (mymap) {
     var div = L.DomUtil.create('div');
@@ -826,43 +827,43 @@ command.onAdd = function (mymap) {
 
 command.addTo(mymap); //your map variable
 
-function hideFireLines(){
+function hideFireLines() {
     var checkbox = document.getElementById('inputFireLine');
     var x = document.getElementsByClassName("fireLine");
     var i;
-    if(checkbox.checked != true){
+    if (checkbox.checked != true) {
         for (i = 0; i < x.length; i++) {
             x[i].style.display = "none";
         }
         fireLines.setMode('view');
         document.getElementById("drawfl").disabled = true;
-    }else{
+    } else {
         for (i = 0; i < x.length; i++) {
             x[i].style.display = "block";
         }
-        if(document.getElementById('mode').value == 'draw-fl'){
+        if (document.getElementById('mode').value == 'draw-fl') {
             fireLines.setMode('add');
         }
         document.getElementById("drawfl").disabled = false;
     }
-    
+
 }
 
-function hideShadowLines(){
+function hideShadowLines() {
     var checkbox = document.getElementById('inputShadowLine');
     var x = document.getElementsByClassName("shadowLine");
     var i;
-    if(checkbox.checked != true){
+    if (checkbox.checked != true) {
         for (i = 0; i < x.length; i++) {
             x[i].style.display = "none";
         }
         shadowLines.setMode('view');
         document.getElementById("drawsl").disabled = true;
-    }else{
+    } else {
         for (i = 0; i < x.length; i++) {
             x[i].style.display = "block";
         }
-        if(document.getElementById('mode').value == 'draw-sl'){
+        if (document.getElementById('mode').value == 'draw-sl') {
             shadowLines.setMode('add');
         }
         document.getElementById("drawsl").disabled = false;
