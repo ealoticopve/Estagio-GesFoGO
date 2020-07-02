@@ -3,6 +3,8 @@ var sensorGroup = L.layerGroup(); //sensors layers
 var fireLinesGroup = L.layerGroup(); //fire lines layers
 var shadowLinesGroup = L.layerGroup(); //shadow lines layers
 var layersGeoJSON = L.layerGroup(); //timeline polygons
+var drawnFireLinesGroup = L.layerGroup(); //fire lines layers
+var drawnShadowLinesGroup = L.layerGroup(); //shadow lines layers
 //my leaflet map
 var mymap = L.map('map', {
     center: [32.751589401074156, -16.893112091737557], //centered in Madeira Island
@@ -30,6 +32,7 @@ var mapTiles = {
 
 //Free Hand Draws/Shapes
 require('leaflet-freehandshapes');
+
 var fireLines = new L.FreeHandShapes({
     polygon: {
         className: 'fireLine',
@@ -63,21 +66,56 @@ var shadowLines = new L.FreeHandShapes({
     merge_polygons: true,
     concave_polygons: false
 });
+
+
+var drawnfireLines = new L.FreeHandShapes({
+    polygon: {
+        className: 'fireLine',
+        color: 'red',
+        fillColor: 'red',
+        opacity: 0.7,
+        weight: 3,
+        smoothFactor: 1
+    },
+    polyline: {
+        color: '#D55F04',
+        smoothFactor: 1
+    },
+    simplify_tolerance: 0.001,
+    merge_polygons: true,
+    concave_polygons: false
+});
+var drawnshadowLines = new L.FreeHandShapes({
+    polygon: {
+        className: 'shadowLine',
+        color: '#8F6F56',
+        fillColor: '#8F6F56',
+        weight: 3,
+        smoothFactor: 0
+    },
+    polyline: {
+        color: '#8F6F56',
+        smoothFactor: 0
+    },
+    simplify_tolerance: 0.001,
+    merge_polygons: true,
+    concave_polygons: false
+});
 console.log(fireLines)
 //change draw mode
 document.getElementById('mode').onchange = function () {
     //freeDraw allows us to create and edit
     switch (this.value) {
         case 'nothing':
-            fireLines.setMode('view');
-            shadowLines.setMode('view');
+            drawnfireLines.setMode('view');
+            drawnshadowLines.setMode('view');
             break;
         case 'draw-fl':
-            shadowLines.setMode('view');
-            fireLines.setMode('add');
-            fireLinesGroup.addLayer(fireLines).addTo(mymap);
-            console.log(fireLines)
-            fireLines.on('layeradd', function (data) {
+            drawnshadowLines.setMode('view');
+            drawnfireLines.setMode('add');
+            fireLinesGroup.addLayer(drawnfireLines).addTo(mymap);
+            console.log(drawnfireLines)
+            drawnfireLines.on('layeradd', function (data) {
                 var checkbox = document.getElementById('inputFireLine');
                 checkbox.checked = true;
                 hideFireLines();
@@ -85,10 +123,10 @@ document.getElementById('mode').onchange = function () {
             });
             break;
         case 'draw-sl':
-            fireLines.setMode('view');
-            shadowLines.setMode('add');
-            shadowLinesGroup.addLayer(shadowLines).addTo(mymap);
-            shadowLines.on('layeradd', function (data) {
+            drawnfireLines.setMode('view');
+            drawnshadowLines.setMode('add');
+            shadowLinesGroup.addLayer(drawnshadowLines).addTo(mymap);
+            drawnshadowLines.on('layeradd', function (data) {
                 var checkbox = document.getElementById('inputShadowLine');
                 checkbox.checked = true;
                 hideShadowLines();
@@ -96,8 +134,8 @@ document.getElementById('mode').onchange = function () {
             });
             break;
         case 'delete':
-            fireLines.setMode('delete');
-            shadowLines.setMode('delete');
+            drawnfireLines.setMode('delete');
+            drawnshadowLines.setMode('delete');
             break;
         default:
             break;
