@@ -12,7 +12,7 @@ L.Control.SliderControl = L.Control.extend({
         markers: null,
         range: false,
         follow: 0,
-        sameDate: false,
+        sameDate: true,
         alwaysShowDate: false,
         rezoom: null,
         orderMarkers: true,

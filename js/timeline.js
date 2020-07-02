@@ -4,18 +4,19 @@ function displayGeoDataTimeLine() {
         showTimeLinePolygons();
     }
     setTimeout(function () {
-        /*var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 1, timeAttribute: "time" });
+        var sliderControl = L.control.sliderControl({ position: "bottomleft", layer: layersGeoJSON, follow: 0, timeAttribute: "time" });
         mymap.addControl(sliderControl);
         sliderControl.startSlider();
 
         sliderControl.on('rangechanged', function (e) {
-            hideFireLines();
+            hideFireLinesDB();
+            hideShadowLinesDB();
             var SensorID = document.getElementById("SI").value;
             if (SensorID != "") {
                 console.log("muda foto");
                 showTimeLineImg(SensorID, e.markers[0].options.time);
             }
-        });*/
+        });
     }, 1000)
 }
 
@@ -59,11 +60,12 @@ function showTimeLinePolygons() {
         password: '',
         database: 'nodevisor'
     });
-    query = "SELECT DATE_FORMAT(timeline_info.date, '%Y-%m-%d %H:%i:%s') as 'date', AsText(timeline_info.coordinates) as 'coords' FROM timeline_info";
+    query = "SELECT DATE_FORMAT(timeline_info.date, '%Y-%m-%d %H:%i:%s') as 'date', type, AsText(timeline_info.coordinates) as 'coords' FROM timeline_info";
     connection.query(query, function (err, result) {
         if (err) {
             console.log(err);
         } else {
+            console.log(result);
             for (i in result) {
                 var resWithoutPolygon = result[i].coords.split("POLYGON((");
                 var resWithoutPolygon2 = resWithoutPolygon[1].split("))");
@@ -73,9 +75,16 @@ function showTimeLinePolygons() {
                     Coordenadas = [coordenadas[1], coordenadas[0]]
                     LatLng.push(Coordenadas);
                 }
-                var polygon = L.polygon(LatLng, { className: 'fireLine', color: 'red', fillColor: 'red', fillOpacity: 0.6, opacity: 1, time: result[i].date }, { alwaysShowDate: true })
 
-                // layersGeoJSON.addLayer(polygon);
+                console.log(result[i].date);
+                if(result[i].type == 'fire'){
+                    var polygon = L.polygon(LatLng, { className: 'fireLineDB', color: 'red', fillColor: 'red', fillOpacity: 0.6, opacity: 1, time: result[i].date }, { alwaysShowDate: true })
+                }else{
+                    var polygon = L.polygon(LatLng, { className: 'shadowLineDB', color: 'grey', fillColor: 'grey', fillOpacity: 0.6, opacity: 1, time: result[i].date }, { alwaysShowDate: true })
+                }
+
+
+                layersGeoJSON.addLayer(polygon);
                 LatLng = [];
                 polygon.id = result[i].date;
             }
@@ -119,6 +128,8 @@ document.getElementById("confirmTimeline").addEventListener("click", function up
 });
 
 createDrawnLayer("fire");
+createDrawnLayer("shadow");
+
 function createDrawnLayer(type) {
     var latlng = [];
     var coordinate = [];
@@ -147,18 +158,21 @@ function createDrawnLayer(type) {
                     latlng.push(coordinate);
                 }
                 if (type == "fire") {
-                    console.log("XDD")
                     drawnFireLinesGroup.addLayer(drawnfireLines).addTo(mymap);
                     drawnfireLines.addPolygon([
                         latlng
-                    ], true, true, false);
+                    ], true, true, true);
+                    hideFireLinesDrawn();
+
                 }
                 else {
                     drawnShadowLinesGroup.addLayer(drawnshadowLines).addTo(mymap);
                     drawnshadowLines.addPolygon([
                         latlng
-                    ], true, true, false);
+                    ], true, true, true);
+                    hideShadowLinesDrawn();
                 }
+                latlng = [];
             }
             connection.end(() => {
                 console.log("Connection closed with sucess.");
