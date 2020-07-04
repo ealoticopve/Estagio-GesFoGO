@@ -105,7 +105,7 @@ L.Control.SliderControl = L.Control.extend({
                     layer = that._setPopupProperty(layer);
                 }
                 options.markers[index_temp] = layer;
-
+                
                 ++index_temp;
             });
 

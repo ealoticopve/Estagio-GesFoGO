@@ -127,61 +127,6 @@ document.getElementById("confirmTimeline").addEventListener("click", function up
     }
 });
 
-createDrawnLayer("fire");
-createDrawnLayer("shadow");
-
-function createDrawnLayer(type) {
-    var latlng = [];
-    var coordinate = [];
-    const mysql = require('mysql');
-    const connection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: 'root',
-        password: '',
-        database: 'nodevisor'
-    });
-
-    query = "SELECT AsText(`firelines_coords_drawn`) as 'coords' FROM drawn_polygons WHERE type = '" + type + "'";
-    console.log(query)
-    connection.query(query, function (err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(result)
-            for (i in result) {
-                var resWithoutPolygon = result[i].coords.split("POLYGON((");
-                var resWithoutPolygon2 = resWithoutPolygon[1].split("))");
-                var res = resWithoutPolygon2[0].split(",");
-                for (j in res) {
-                    var coordenadas = res[j].split(" ");
-                    coordinate = [coordenadas[1], coordenadas[0]]
-                    latlng.push(coordinate);
-                }
-                if (type == "fire") {
-                    drawnFireLinesGroup.addLayer(drawnfireLines).addTo(mymap);
-                    drawnfireLines.addPolygon([
-                        latlng
-                    ], true, true, true);
-                    hideFireLinesDrawn();
-
-                }
-                else {
-                    drawnShadowLinesGroup.addLayer(drawnshadowLines).addTo(mymap);
-                    drawnshadowLines.addPolygon([
-                        latlng
-                    ], true, true, true);
-                    hideShadowLinesDrawn();
-                }
-                latlng = [];
-            }
-            connection.end(() => {
-                console.log("Connection closed with sucess.");
-            });
-        }
-    });
-}
-
-
 
 
 

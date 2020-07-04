@@ -943,3 +943,214 @@ function hideFireLinesDrawn() {
     }
 
 }
+
+createDrawnLayer("fire");
+createDrawnLayer("shadow");
+
+function createDrawnLayer(type) {
+    var latlng = [];
+    var coordinate = [];
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'nodevisor'
+    });
+
+    query = "SELECT AsText(`firelines_coords_drawn`) as 'coords' FROM drawn_polygons WHERE type = '" + type + "'";
+    console.log(query)
+    connection.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result)
+            for (i in result) {
+                var resWithoutPolygon = result[i].coords.split("POLYGON((");
+                var resWithoutPolygon2 = resWithoutPolygon[1].split("))");
+                var res = resWithoutPolygon2[0].split(",");
+                for (j in res) {
+                    var coordenadas = res[j].split(" ");
+                    coordinate = [coordenadas[1], coordenadas[0]]
+                    latlng.push(coordinate);
+                }
+                if (type == "fire") {
+                    drawnFireLinesGroup.addLayer(drawnfireLines).addTo(mymap);
+                    drawnfireLines.addPolygon([
+                        latlng
+                    ], true, true, true);
+                    console.log(drawnfireLines)
+                    hideFireLinesDrawn();
+
+                }
+                else {
+                    drawnShadowLinesGroup.addLayer(drawnshadowLines).addTo(mymap);
+                    drawnshadowLines.addPolygon([
+                        latlng
+                    ], true, true, true);
+                    hideShadowLinesDrawn();
+                }
+                latlng = [];
+            }
+            connection.end(() => {
+                console.log("Connection closed with sucess.");
+            });
+        }
+    });
+}
+
+function deleteDrawnLayer(type){
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'nodevisor'
+    });
+
+    query = "DELETE FROM drawn_polygons WHERE type = '" + type + "'";
+    console.log(query)
+    connection.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Deleted with success.");
+        }
+    });
+
+}
+
+function insertDrawnLayer(type){
+    const mysql = require('mysql');
+    const connection = mysql.createConnection({
+        host: '127.0.0.1',
+        user: 'root',
+        password: '',
+        database: 'nodevisor'
+    });
+
+    query = "SELECT AsText(`coordinates`) as 'coords', campaign_id, type, date FROM timeline_info WHERE type = '" + type + "'";
+    connection.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            connection.end(() => {
+                console.log("Connection closed with sucess.");
+            });
+
+            for (i in result) {
+
+                const connection2 = mysql.createConnection({
+                    host: '127.0.0.1',
+                    user: 'root',
+                    password: '',
+                    database: 'nodevisor'
+                });
+
+                var query = "INSERT INTO drawn_polygons (id_campaign, firelines_coords_drawn, type) VALUES (" + result[i].campaign_id + ", PolygonFromText('" + result[i].coords + "'), '" + result[i].type + "')";
+                console.log(query);
+                connection2.query(query, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        connection2.end(() => {
+                            console.log("Connection closed with sucess.");
+                        });
+                    }
+                });
+            }
+            
+        }
+    })
+    
+}
+
+function saveLayer(type){
+    layersSave = [];
+    var groupLayers;
+
+    if(type == 'fire'){
+        groupLayers = drawnFireLinesGroup._layers;
+    }else if(type == 'shadow'){
+        groupLayers = drawnShadowLinesGroup._layers;
+    }
+
+    Object.keys(groupLayers).forEach(function(key) {
+        var layersDrawn = groupLayers[key];
+        Object.keys(layersDrawn._layers).forEach(function(key2) {
+            var layerDrawn = layersDrawn._layers[key2];
+            layersSave.push(layerDrawn);
+        });
+    });
+
+    const mysql = require('mysql');
+
+    layersSave.forEach(layer => {
+        var polygon = "";
+        var firstlatlng;
+        var index = 0;
+        layer._latlngs[0].forEach(latlngs => {
+            if (index == 0){
+                firstlatlng = latlngs.lng + " " + latlngs.lat + ", ";
+            }
+            polygon += latlngs.lng + " " + latlngs.lat + ", ";
+            index++;
+        });
+        polygon += firstlatlng;
+        polygon = polygon.substring(0, polygon.length - 2)
+
+        var query = "INSERT INTO drawn_polygons (id_campaign, firelines_coords_drawn, type) VALUES (" + 1 + ", PolygonFromText('POLYGON((" + polygon + "))'), '" + type + "')";
+
+        console.log(query);
+        
+        const connection = mysql.createConnection({
+            host: '127.0.0.1',
+            user: 'root',
+            password: '',
+            database: 'nodevisor'
+        });
+
+        connection.query(query, function (err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                connection.end(() => {
+                    console.log("Connection closed with sucess.");
+                });
+            }
+        });
+
+    });
+
+}
+
+function revertDrawns(){
+    deleteDrawnLayer("fire");
+    deleteDrawnLayer("shadow");
+    setTimeout(function() {
+        insertDrawnLayer("fire");
+    }, 500)
+    setTimeout(function() {
+        insertDrawnLayer("shadow");
+    }, 500)
+    setTimeout(function() {
+        location.reload();
+    }, 1500)
+    
+}
+
+function saveDrawns(){
+    deleteDrawnLayer("fire");
+    deleteDrawnLayer("shadow");
+    setTimeout(function() {
+        saveLayer('fire');
+    }, 500)
+    setTimeout(function() {
+        saveLayer('shadow');
+    }, 500)
+    setTimeout(function() {
+        location.reload();
+    }, 1500)
+}
+
